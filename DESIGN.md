@@ -35,34 +35,125 @@ ESPHome on ESP32-S3, with an STM32G0 coprocessor for real-time sensor sampling.
 
 ### Isolated Probe Domain (pH / ORP)
 
-**Decision:** Use ADM3260 + ADS1115 differential for galvanic isolation.
+**Decision:** ADM3260 + MAX9637 buffer + ADS1115 differential for
+galvanic isolation. Architecture proven in the reefpi-pico pH module
+(see `reference/reefpi_pico_ph.svg` for that design's schematic).
 
-- **ADM3260ARSZ** (20-SSOP): Bidirectional I2C isolator with integrated
-  isoPower DC/DC (150mW output at 3.3V). Eliminates separate isolated
-  DC/DC converter. ~$5.30 (LCSC C208558).
-- **ADS1115IDGSR** (10-VSSOP): 16-bit delta-sigma ADC, 2 differential
-  channels. Reads pH and ORP probes with sub-0.01 pH resolution at
-  PGA gain=8 (±0.512V, 0.015mV/count). ~$3.
-- **Two BNC connectors** on isolated ground domain. Both channels are
-  generic — pH vs ORP assignment is firmware configuration.
-- Total isolation BOM: ~$8.30 for two ICs, no discrete DC/DC.
+#### Isolation
 
-**Why differential:** pH/ORP probes are floating Nernst cells with no
-relationship to system ground. Differential rejects common-mode noise
-from pumps, heaters, and powerheads sharing the tank water.
+- **ADM3260ARSZ** (20-SSOP, LCSC C208558): Bidirectional I2C isolator
+  with integrated isoPower DC/DC (150mW at 3.3V). Eliminates discrete
+  isolated DC/DC. ~$5.30.
+- All components downstream of the ADM3260 live on ISO_VDD / ISO_GND.
+  The only connection crossing the barrier is I2C (digital, isolated).
 
-**Why not STM32 ADC for pH:** 12-bit over 3.3V gives 0.8mV/count.
-Nernst slope is ~59mV/pH at 25°C. That's marginal for 0.01 pH
-resolution. The ADS1115 at gain=8 gives 0.015mV/count — limited by
-probe accuracy, not ADC.
+#### Probe Buffer Amplifier
+
+- **MAX9637AXA+T** (dual, SOT-23-8, LCSC C2060164): CMOS rail-to-rail
+  opamp with 1pA typ / 50pA max input bias current. ~$1.50.
+- Configured as **unity-gain voltage followers** — one per probe channel.
+  Buffers the high-impedance probe signal (~100MΩ for pH, lower for ORP)
+  so the ADS1115 sees a low-impedance source.
+- At 100MΩ probe impedance, 50pA worst-case bias = 5µV error
+  (negligible vs 59mV/pH Nernst slope).
+- 220Ω series resistor + 100pF cap on output for stability (per
+  reefpi-pico design).
+- Powered from ISO_VDD (3.3V from ADM3260 isoPower).
+
+Alternative: **OPA2376AIDR** (dual, SOIC-8, LCSC stock 7528) — 10pA
+max bias, 25µV offset, 5.5MHz GBW. Slightly better specs but larger
+package. Either works.
+
+#### ADC
+
+- **ADS1115IDGST** (10-VSSOP, LCSC C468683): 16-bit delta-sigma ADC,
+  2 differential channels. I2C address 0x48 (ADDR → GND).
+- pH probe: PGA gain=8 (±0.512V FS), 0.015mV/count → sub-0.01 pH
+  resolution, limited by probe accuracy not ADC.
+- ORP probe: PGA gain=1 (±4.096V FS), 0.125mV/count — covers full
+  ORP range (±2V) with margin.
+- Powered from ISO_VDD.
+
+#### Bias Voltage
+
+pH/ORP probes output a voltage centered around 0V (differential). To
+keep the signal within the ADS1115's common-mode input range on ISO_VDD
+(must be between ISO_GND−0.3V and ISO_VDD+0.3V):
+
+- Apply a **mid-rail bias** of ISO_VDD/2 (~1.65V) to the reference
+  electrode side (ADS1115 AINn) via a precision resistor divider.
+- Probe signal goes through the MAX9637 buffer to ADS1115 AINp.
+- Differential reading = V_probe, centered at 0, independent of bias.
+- Bias divider: 2x 100kΩ 0.1% from ISO_VDD, decoupled with 0.1µF.
+
+#### Probe Connectors
+
+- 2x BNC vertical (panel-mount or PCB-mount), on the isolated ground
+  domain. Center pin = glass/sensing electrode, shield = reference.
+- Both channels are generic — pH vs ORP assigned in firmware.
+
+**Total isolated probe BOM:** ADM3260 ($5.30) + MAX9637 ($1.50) +
+ADS1115 ($3) + passives (~$0.50) ≈ **$10.30** for two isolated
+differential probe channels.
 
 ### Power Supply
 
-- **Input:** 12-24V DC (barrel jack or Phoenix connector, matching other ReefVolt boards)
-- **TPS54202DDCR:** Synchronous buck, 4.5-28V in, regulated output (5V or 3.3V TBD)
-- **TPS70950DBVT:** 5V LDO (150mA) for sensors, display, probe excitation
-- **3.3V rail:** For ESP32-S3 and STM32G031 — either second LDO or buck output directly
-- **Isolated 3.3V:** Provided by ADM3260 isoPower (up to 150mW, plenty for ADS1115)
+```
+  12-24V DC ─┬─ TPS54202DDCR ──── 5V rail
+   (barrel   │   (sync buck,       │
+    jack or  │    4.7µH, 2A)       ├── TCAN1044V (CAN xcvr, ~70mA)
+    Phoenix) │                     ├── OLED carrier (if 5V variant)
+             │                     │
+             │                     └── LM1117IMP-3.3 ──── 3.3V rail
+             │                          (LDO, 800mA,       │
+             │                           SOT-223)           ├── ESP32-S3-MINI (~300mA peak WiFi TX)
+             │                                              ├── STM32G0B1 (~20mA)
+             │                                              ├── ADM3260 VDD1 (~10mA)
+             │                                              ├── NTC pull-ups, LEDs, etc.
+             │                                              │
+             │                     ADM3260 isoPower ──── ISO_3V3 (isolated)
+             │                      (150mW from 3.3V)       │
+             │                                              ├── ADS1115 (~0.7mA)
+             │                                              ├── MAX9637 (~0.5mA)
+             │                                              └── Bias divider (~0.03mA)
+             │
+             └── Reverse polarity protection (SS14 or P-FET)
+```
+
+#### Buck: TPS54202DDCR (12-24V → 5V)
+
+- 4.5-28V input, 2A synchronous buck (SOT-23-6, LCSC stock 25220)
+- External components (per OsmoBuddy proven design):
+  - L: 4.7µH shielded inductor (SRN4018-4R7M)
+  - C_in: 4.7µF 50V X7R 1210 + 0.1µF 50V 0603
+  - C_out: 22µF 25V X7R 1210 + 0.1µF 0603
+  - C_boot: 0.1µF 0603
+  - R_FB: 100kΩ / 22.1kΩ divider (5.53V → 5.0V with 1.224V ref)
+  - EN: tied to VIN through 100kΩ (always on)
+
+#### LDO: LM1117IMP-3.3 (5V → 3.3V)
+
+- 800mA, SOT-223 (LCSC stock 35646)
+- Dropout ~1.2V at full load → ok at 5V in, 3.3V out
+- C_in: 0.1µF, C_out: 22µF (tantalum or MLCC, ESR matters for stability)
+- Thermal: worst case (5V−3.3V) × 0.5A = 0.85W → warm in SOT-223 but fine
+  with copper pour. ESP32 peak TX current is brief (~10ms bursts).
+
+#### Isolated Power: ADM3260 isoPower
+
+- Integrated in the ADM3260, no external DC/DC needed
+- 150mW at 3.3V output = ~45mA max
+- Actual load: ADS1115 (0.7mA) + MAX9637 (0.5mA) + bias divider (0.03mA)
+  = **~1.3mA** — well within budget
+- External caps: 0.1µF + 10µF on ISO_VDD per datasheet
+
+#### Input Protection
+
+- **Reverse polarity:** SS14 Schottky in series (simple, ~0.4V drop) or
+  P-FET reverse protection (lower drop, more parts). SS14 matches existing
+  ReefVolt designs.
+- **Overvoltage:** TVS diode (SMBJ28A or similar, 28V standoff) across input
+- **Bulk cap:** 56µF 63V aluminum electrolytic (same as DCBuddy/OsmoBuddy)
 
 ### Display
 
@@ -104,32 +195,70 @@ probe accuracy, not ADC.
 
 ### NTC Thermistors (x3)
 
-- Connected to STM32G0B1 internal 12-bit ADC (3 channels)
-- Voltage divider topology: VDD — R_fixed — ADC_pin — NTC — GND
-- 10k NTC with 10k fixed resistor (0.1% 25ppm/°C for heater safety use)
-- 12-bit ADC gives ~0.1°C resolution in typical aquarium range (20-30°C)
-- Intended placement: tank, sump, ambient (or heater cross-check)
-- **TODO:** Connector type (2-pin Phoenix? JST PH?)
-- **TODO:** NTC spec: 10k B3988 glass-encap in SS316 sheath (per heater
-  design doc) or simpler probe for non-heater use
+```
+  3.3V ──── R_fixed (10kΩ 0.1% 25ppm) ──┬── STM32 ADC input
+                                          │
+                                     NTC (10kΩ)
+                                          │
+                                        GND
+```
+
+- Connected to STM32G0B1 internal 12-bit ADC (3 channels: PA0, PA1, PA4)
+- Voltage divider: 3.3V — R_fixed (top) — ADC — NTC (bottom) — GND
+  - NTC on bottom leg so open-circuit reads 0V (detectable as fault)
+  - 10kΩ / 10kΩ at 25°C gives ~1.65V mid-scale
+- R_fixed: 10kΩ 0.1% 25ppm/°C (Vishay CRCW series or similar)
+- 0.1µF cap from ADC pin to GND for noise filtering
+  (RC time constant with 10k||10k = 5kΩ × 100nF = 500µs — fine for
+  slow temperature sampling at ~1Hz)
+- 12-bit ADC at 3.3V: 0.806mV/count. At 25°C (half-scale), sensitivity
+  is ~18mV/°F → ~22 counts/°F → **~0.045°F resolution**
+- NTC spec options:
+  - **Standard:** 10kΩ B3435 ±1% epoxy-coated bead, ring terminals
+    (cheap, good for ambient/sump)
+  - **Heater-grade:** 10kΩ B3988 ±1% glass-encap in SS316L thermowell
+    with silicone cable (for submersed/heater cross-check use)
+- Connectors: Phoenix COMBICON 2-pos (1803277) per channel — 3 headers
 
 ### 1-Wire / DS18B20 (x2 buses)
 
-- 2 independent buses, each on a dedicated STM32G0B1 USART in half-duplex mode
-- Each bus supports daisy-chained DS18B20 sensors (unlimited per bus)
-- 3-wire connectors: VDD, DQ, GND (avoid parasitic power for reliability)
-- 4.7kΩ pullup per bus on DQ line
-- Waterproof SS316 probe assemblies with silicone cable (standard aquarium form factor)
-- **TODO:** Connector type (3-pin Phoenix COMBICON? JST PH?)
-- **TODO:** TVS + 100Ω/100pF damper for long cable runs
+```
+  3.3V ──── 4.7kΩ ──┬── DQ ──── Phoenix 3-pos (VDD/DQ/GND)
+                     │                │
+               STM32 USART TX    100Ω series
+               (half-duplex)         │
+                                  100pF to GND
+                                (damper for >1m cables)
+```
+
+- 2 independent buses on STM32G0B1 USART2 (PA2) and USART3 (PA3)
+- Each USART in half-duplex open-drain mode (standard 1-Wire over UART):
+  - 9600 baud for reset/presence pulse
+  - 115200 baud for bit read/write
+  - Single-pin TX/RX on open-drain pad
+- 4.7kΩ pull-up per bus from DQ to 3.3V
+- 100Ω series + 100pF to GND on MCU side for cable runs >1m
+- TVS diode (PESD5V0S1BA or similar) on DQ for ESD/surge protection
+- 3-wire powered mode (VDD + DQ + GND) — no parasitic power
+- Connectors: Phoenix COMBICON 3-pos (1803280) per bus — 2 headers
+- DS18B20 probe form factor: waterproof SS316 tube, silicone cable
 
 ### Float Switches (x4)
 
-- Connected to STM32G0B1 GPIO with internal pull-ups
-- Software debounce via timer interrupt
-- 4 inputs: e.g., ATO reservoir low, sump high, sump low, leak detect
+```
+  3.3V (internal pull-up) ──── STM32 GPIO ──── Phoenix 2-pos ──── switch ──── GND
+                                   │
+                                 100nF (debounce cap)
+```
+
+- Connected to STM32G0B1 GPIO with internal pull-ups (PA5, PA6, PA7, PB0)
+- 100nF cap from GPIO to GND for hardware debounce (~1ms RC with 33kΩ pull-up)
+- Software debounce via timer interrupt (50ms window, majority-vote)
 - NO or NC — firmware-configurable polarity per channel
-- **TODO:** Connector type (2-pin screw terminal per switch, or shared multi-pin?)
+- Typical assignment: ATO reservoir low, sump high, sump low, leak detect
+- Connectors: Phoenix COMBICON 2-pos (1803277) per switch — 4 headers
+- ESD protection: internal STM32 clamping diodes sufficient for
+  short cable runs; add TVS if cables >2m
 
 ---
 
@@ -296,37 +425,84 @@ the NTC via its own ADC for firmware cross-checks only.
 
 ---
 
-## Parts List (preliminary)
+## Parts List
 
 ### Active Components
 
 | Part | MPN | Package | Qty | Purpose | LCSC |
 |------|-----|---------|-----|---------|------|
-| ESP32-S3-MINI-1-N8 | ESP32-S3-MINI-1-N8 | Module | 1 | WiFi/BLE MCU | — |
-| STM32G0B1KBU6 | STM32G0B1KBU6N | UFQFPN-32 | 1 | Sensor coprocessor + FDCAN | — |
-| TCAN1044VDRQ1 | TCAN1044VDRQ1 | SOIC-8 | 1 | CAN transceiver (shared) | — |
-| ADM3260ARSZ | ADM3260ARSZ | SSOP-20 | 1 | I2C isolator + isoPower | C208558 |
-| ADS1115IDGSR | ADS1115IDGSR | VSSOP-10 | 1 | 16-bit diff ADC (isolated) | — |
-| TPS54202DDCR | TPS54202DDCR | SOT-23-6 | 1 | Buck converter | — |
-| TPS70950DBVT | TPS70950DBVT | SOT-23-5 | 1 | 5V LDO | — |
+| ESP32-S3-MINI-1-N8 | ESP32-S3-MINI-1-N8 | Module | 1 | WiFi/BLE MCU, OLED, USB | stock 5071 |
+| STM32G0B1KBU6 | STM32G0B1KBU6N | UFQFPN-32 | 1 | Sensor MCU + FDCAN | stock 2631 |
+| TCAN1044VDRQ1 | TCAN1044VDRQ1 | SOIC-8 | 1 | CAN transceiver | stock 4328 |
+| ADM3260ARSZ | ADM3260ARSZ-RL7 | SSOP-20 | 1 | I2C isolator + isoPower | C208558, stock 467 |
+| MAX9637AXA+T | MAX9637AXA+T | SOT-23-8 | 1 | Dual probe buffer (isolated) | C2060164, stock 204 |
+| ADS1115IDGST | ADS1115IDGST | VSSOP-10 | 1 | 16-bit diff ADC (isolated) | C468683, stock 220 |
+| TPS54202DDCR | TPS54202DDCR | SOT-23-6 | 1 | Buck 12-24V → 5V | stock 25220 |
+| LM1117IMP-3.3 | LM1117IMPX-3.3/NOPB | SOT-223 | 1 | LDO 5V → 3.3V (800mA) | stock 35646 |
 | USBLC6-4SC6 | USBLC6-4SC6 | SOT-23-6 | 1 | USB ESD protection | — |
 
 ### Connectors
 
 | Part | MPN | Qty | Purpose |
 |------|-----|-----|---------|
-| BNC vertical | TBD | 2 | pH / ORP probes (isolated) |
-| USB-C 16-pin | 10155435-00011LF | 1 | Programming + power |
+| BNC vertical | TBD | 2 | pH / ORP probes (isolated side) |
+| USB-C 16-pin | 10155435-00011LF | 1 | Programming + power (ESP32 native USB) |
 | Micro-Fit 3.0 6-pos | 43045-0601 | 1 | CAN bus |
-| Phoenix COMBICON 2-pos | 1803277 | ~8 | NTC (x3), float (x4), power in |
+| Phoenix COMBICON 2-pos | 1803277 | 8 | NTC (x3), float (x4), power in |
 | Phoenix COMBICON 3-pos | 1803280 | 2 | 1-Wire buses (VDD/DQ/GND) |
 | OLED carrier header | 0901471104 | 1 | Display (4-pin, 2.54mm) |
 | Barrel jack | PJ-0XX | 1 | DC power input |
 
-### Passives
+### Power Passives
 
-Standard ReefVolt passives (0603 resistors, 0603/1210 capacitors).
-See DCBuddy/OsmoBuddy BOMs for exact MPN consolidation.
+| Part | Value | Package | Qty | Purpose |
+|------|-------|---------|-----|---------|
+| Inductor | 4.7µH shielded | SRN4018 | 1 | TPS54202 buck |
+| Bulk cap | 56µF 63V alum. | 10mm SMD | 1 | Input bulk (FKG series) |
+| Input cap | 4.7µF 50V X7R | 1210 | 1 | TPS54202 input |
+| Output cap | 22µF 25V X7R | 1210 | 1 | TPS54202 output |
+| LDO output | 22µF 25V X7R | 1210 | 1 | LM1117 output |
+| Boot cap | 0.1µF 50V X7R | 0603 | 1 | TPS54202 bootstrap |
+| Decoupling | 0.1µF 50V X7R | 0603 | ~12 | IC decoupling (throughout) |
+| Decoupling | 4.7µF 50V X7R | 1210 | 2 | VDD bulk (ESP32, STM32) |
+| ISO decoupling | 0.1µF + 10µF | 0603/0805 | 2 | ADM3260 ISO_VDD |
+| FB divider top | 100kΩ 1% | 0603 | 1 | TPS54202 feedback |
+| FB divider bot | 22.1kΩ 0.1% | 0603 | 1 | TPS54202 feedback |
+| Schottky | SS14 | SMA | 1 | Reverse polarity protection |
+
+### Sensor Passives
+
+| Part | Value | Package | Qty | Purpose |
+|------|-------|---------|-----|---------|
+| NTC fixed R | 10kΩ 0.1% 25ppm | 0603 | 3 | NTC divider top leg |
+| NTC filter | 0.1µF 50V X7R | 0603 | 3 | ADC input filter |
+| 1-Wire pullup | 4.7kΩ | 0603 | 2 | DQ bus pull-up |
+| 1-Wire damper R | 100Ω | 0603 | 2 | Series damper for long cables |
+| 1-Wire damper C | 100pF | 0603 | 2 | Shunt damper for long cables |
+| Float debounce | 100nF | 0603 | 4 | GPIO debounce cap |
+| CAN term | 120Ω | 1210 | 1 | CAN bus termination |
+
+### Isolated Probe Passives
+
+| Part | Value | Package | Qty | Purpose |
+|------|-------|---------|-----|---------|
+| Bias divider | 100kΩ 0.1% | 0603 | 4 | Mid-rail bias (2 per probe) |
+| Bias decoupling | 0.1µF | 0603 | 2 | Bias midpoint filter |
+| Buffer series R | 220Ω | 0603 | 2 | MAX9637 output stability |
+| Buffer output C | 100pF | 0603 | 2 | MAX9637 output filter |
+| ADS1115 decoupling | 0.1µF + 4.7µF | 0603 | 2 | ADC power filtering |
+
+### Other Passives
+
+| Part | Value | Package | Qty | Purpose |
+|------|-------|---------|-----|---------|
+| USB CC resistors | 5.1kΩ | 0402 | 2 | USB-C CC1/CC2 pull-downs |
+| ESP32 pull-ups | 10kΩ | 0603 | 2-4 | EN, BOOT, etc. |
+| STM32 BOOT0 pull-down | 10kΩ | 0603 | 1 | Default boot from flash |
+| Reset cap | 100nF | 0603 | 1 | STM32 NRST filter |
+| LED resistors | 1kΩ | 0603 | 2-3 | Status LEDs |
+| Status LEDs | red/green | 0603 | 2-3 | Power, status, fault |
+| Tactile switch | PTS526SK15SMTR2LFS | SMD | 2 | BOOT + RESET |
 
 ---
 
