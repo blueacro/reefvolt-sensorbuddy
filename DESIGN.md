@@ -35,7 +35,7 @@ ESPHome on ESP32-S3, with an STM32G0 coprocessor for real-time sensor sampling.
 
 ### Isolated Probe Domain (pH / ORP)
 
-**Decision:** ADM3260 + MAX9637 buffer + ADS1115 differential for
+**Decision:** ADM3260 + OPA2376 buffer + ADS1115 differential for
 galvanic isolation. Architecture proven in the reefpi-pico pH module
 (see `reference/reefpi_pico_ph.svg` for that design's schematic).
 
@@ -49,20 +49,26 @@ galvanic isolation. Architecture proven in the reefpi-pico pH module
 
 #### Probe Buffer Amplifier
 
-- **MAX9637AXA+T** (dual, SOT-23-8, LCSC C2060164): CMOS rail-to-rail
-  opamp with 1pA typ / 50pA max input bias current. ~$1.50.
+- **OPA2376AIDR** (dual, SOIC-8, LCSC C46316, stock ~7528): CMOS
+  rail-to-rail opamp, 10pA max input bias, 25µV max offset, 5.5MHz GBW,
+  0.76mA/channel, 2.2–5.5V. ~$2.50.
 - Configured as **unity-gain voltage followers** — one per probe channel.
   Buffers the high-impedance probe signal (~100MΩ for pH, lower for ORP)
   so the ADS1115 sees a low-impedance source.
-- At 100MΩ probe impedance, 50pA worst-case bias = 5µV error
+- At 100MΩ probe impedance, 10pA worst-case bias = 1µV error
   (negligible vs 59mV/pH Nernst slope).
 - 220Ω series resistor + 100pF cap on output for stability (per
   reefpi-pico design).
 - Powered from ISO_VDD (3.3V from ADM3260 isoPower).
+- Quiescent: 1.52mA total → 5mW on ISO_VDD. Well within ADM3260's
+  150mW isoPower budget (~1.3mA other loads).
 
-Alternative: **OPA2376AIDR** (dual, SOIC-8, LCSC stock 7528) — 10pA
-max bias, 25µV offset, 5.5MHz GBW. Slightly better specs but larger
-package. Either works.
+Alternative considered: **MAX9638** (dual version of OPA2376, TDFN-10,
+LCSC C2060285, stock ~2620) — 0.1pA typ bias, 36µA/ch quiescent, 1.5MHz
+GBW. Lower power and bias, but lower bandwidth, harder-to-solder package,
+and lower stock. The OPA2376 is a **single** opamp (not dual) — would
+need two. OPA2376 chosen for better availability, SOIC-8 solderability,
+and adequate specs for this application.
 
 #### ADC
 
@@ -82,7 +88,7 @@ keep the signal within the ADS1115's common-mode input range on ISO_VDD
 
 - Apply a **mid-rail bias** of ISO_VDD/2 (~1.65V) to the reference
   electrode side (ADS1115 AINn) via a precision resistor divider.
-- Probe signal goes through the MAX9637 buffer to ADS1115 AINp.
+- Probe signal goes through the OPA2376 buffer to ADS1115 AINp.
 - Differential reading = V_probe, centered at 0, independent of bias.
 - Bias divider: 2x 100kΩ 0.1% from ISO_VDD, decoupled with 0.1µF.
 
@@ -92,8 +98,8 @@ keep the signal within the ADS1115's common-mode input range on ISO_VDD
   domain. Center pin = glass/sensing electrode, shield = reference.
 - Both channels are generic — pH vs ORP assigned in firmware.
 
-**Total isolated probe BOM:** ADM3260 ($5.30) + MAX9637 ($1.50) +
-ADS1115 ($3) + passives (~$0.50) ≈ **$10.30** for two isolated
+**Total isolated probe BOM:** ADM3260 ($5.30) + OPA2376 ($2.50) +
+ADS1115 ($3) + passives (~$0.50) ≈ **$11.30** for two isolated
 differential probe channels.
 
 ### Power Supply
@@ -114,7 +120,7 @@ differential probe channels.
              │                     ADM3260 isoPower ──── ISO_3V3 (isolated)
              │                      (150mW from 3.3V)       │
              │                                              ├── ADS1115 (~0.7mA)
-             │                                              ├── MAX9637 (~0.5mA)
+             │                                              ├── OPA2376 (~0.5mA)
              │                                              └── Bias divider (~0.03mA)
              │
              └── Reverse polarity protection (SS14 or P-FET)
@@ -143,7 +149,7 @@ differential probe channels.
 
 - Integrated in the ADM3260, no external DC/DC needed
 - 150mW at 3.3V output = ~45mA max
-- Actual load: ADS1115 (0.7mA) + MAX9637 (0.5mA) + bias divider (0.03mA)
+- Actual load: ADS1115 (0.7mA) + OPA2376 (0.5mA) + bias divider (0.03mA)
   = **~1.3mA** — well within budget
 - External caps: 0.1µF + 10µF on ISO_VDD per datasheet
 
@@ -242,6 +248,11 @@ differential probe channels.
 - 3-wire powered mode (VDD + DQ + GND) — no parasitic power
 - Connectors: Phoenix COMBICON 3-pos (1803280) per bus — 2 headers
 - DS18B20 probe form factor: waterproof SS316 tube, silicone cable
+- **Firmware:** LwOW library (MIT, github.com/MaJerle/onewire-uart) —
+  UART-based 1-Wire with ROM search, CRC-8, DS18B20 driver included.
+  One LwOW instance per bus, thin HAL driver maps to STM32 USART
+  half-duplex. Boot-time ROM scan enumerates sensors, then 1 Hz
+  conversion cycles.
 
 ### Float Switches (x4)
 
@@ -435,7 +446,7 @@ the NTC via its own ADC for firmware cross-checks only.
 | STM32G0B1KBU6 | STM32G0B1KBU6N | UFQFPN-32 | 1 | Sensor MCU + FDCAN | stock 2631 |
 | TCAN1044VDRQ1 | TCAN1044VDRQ1 | SOIC-8 | 1 | CAN transceiver | stock 4328 |
 | ADM3260ARSZ | ADM3260ARSZ-RL7 | SSOP-20 | 1 | I2C isolator + isoPower | C208558, stock 467 |
-| MAX9637AXA+T | MAX9637AXA+T | SOT-23-8 | 1 | Dual probe buffer (isolated) | C2060164, stock 204 |
+| OPA2376AIDR | OPA2376AIDR | SOIC-8 | 1 | Dual probe buffer (isolated) | C46316, stock 7528 |
 | ADS1115IDGST | ADS1115IDGST | VSSOP-10 | 1 | 16-bit diff ADC (isolated) | C468683, stock 220 |
 | TPS54202DDCR | TPS54202DDCR | SOT-23-6 | 1 | Buck 12-24V → 5V | stock 25220 |
 | LM1117IMP-3.3 | LM1117IMPX-3.3/NOPB | SOT-223 | 1 | LDO 5V → 3.3V (800mA) | stock 35646 |
@@ -488,8 +499,8 @@ the NTC via its own ADC for firmware cross-checks only.
 |------|-------|---------|-----|---------|
 | Bias divider | 100kΩ 0.1% | 0603 | 4 | Mid-rail bias (2 per probe) |
 | Bias decoupling | 0.1µF | 0603 | 2 | Bias midpoint filter |
-| Buffer series R | 220Ω | 0603 | 2 | MAX9637 output stability |
-| Buffer output C | 100pF | 0603 | 2 | MAX9637 output filter |
+| Buffer series R | 220Ω | 0603 | 2 | OPA2376 output stability |
+| Buffer output C | 100pF | 0603 | 2 | OPA2376 output filter |
 | ADS1115 decoupling | 0.1µF + 4.7µF | 0603 | 2 | ADC power filtering |
 
 ### Other Passives
@@ -513,3 +524,16 @@ the NTC via its own ADC for firmware cross-checks only.
 | sensorbuddy.kicad_sch | Top-level: ESP32-S3, STM32, inter-MCU I2C, CAN, USB, display |
 | psu.kicad_sch | Power supply: input, buck, LDOs, bulk caps |
 | sensors.kicad_sch | Sensor interfaces: isolated probes, NTC, 1-Wire, float switches |
+
+---
+
+## Firmware Dependencies (STM32G0B1)
+
+| Library | License | Purpose | Source |
+|---------|---------|---------|--------|
+| LwOW v3.x | MIT | 1-Wire over UART: ROM search, CRC-8, DS18B20 driver | github.com/MaJerle/onewire-uart |
+| STM32CubeG0 HAL | BSD-3 | Low-level peripheral drivers (USART, ADC, FDCAN, I2C, GPIO) | ST |
+
+Architecture: superloop with timer interrupts (no RTOS). 1 Hz sensor
+sampling (NTC ADC + DS18B20 conversion), float switch polling, FDCAN
+TX/RX, USART1 gateway to ESP32.

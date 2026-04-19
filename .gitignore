@@ -5,12 +5,13 @@ _autosave-*
 *.bak
 *~
 
-# JLCPCB output (regenerated via make)
+# JLCPCB fab packages (regenerated via make jlc)
 hardware/*/jlcpcb/
 hardware/*/*-jlcpcb.zip
 
-# Generated docs
-hardware/*/docs/images/
+# Generated schematic SVGs (regenerated via make docs)
+hardware/*/docs/images/sensorbuddy*.svg
+hardware/*/docs/images/plugcontrol*.svg
 
 # ESPHome build artifacts
 firmware/**/.esphome/

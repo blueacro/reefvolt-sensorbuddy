@@ -1,0 +1,117 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "a1b2c3d4-e5f6-7890-abcd-ef0123456789")
+	(paper "A3")
+	(title_block
+		(title "ReefVolt SensorBuddy — Main")
+		(date "2026-04-18")
+		(rev "0.1")
+		(comment 1 "ESP32-S3-MINI + STM32G0B1 + CAN + USB-C")
+		(comment 2 "Aquarium sensor interface with isolated probes")
+		(comment 3 "CERN-OHL-P v2 / Apache 2.0")
+		(comment 4 "Yann Ramin")
+	)
+	(lib_symbols
+	)
+
+	(text "ReefVolt SensorBuddy\nTop-Level Sheet\n\nESP32-S3-MINI-1-N8: WiFi/BLE bridge, OLED, USB\nSTM32G0B1KBU6: Sensor coprocessor, FDCAN master\nTCAN1044VDRQ1: CAN bus transceiver\nUSBLC6-4SC6: USB ESD protection\n\nInter-MCU: USART1 (PA8/PA9 ↔ ESP32 GPIO)\nESP32 controls STM32 BOOT0 + NRST for in-system flashing"
+		(exclude_from_sim no)
+		(at 25.4 25.4 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "00000001-0001-0001-0001-000000000001")
+	)
+
+	(sheet
+		(at 25.4 177.8)
+		(size 30.48 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "b2c3d4e5-f6a7-8901-bcde-f01234567890")
+		(property "Sheetname" "PSU"
+			(at 25.4 177.0884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "psu.kicad_sch"
+			(at 25.4 193.6146 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+	)
+
+	(sheet
+		(at 63.5 177.8)
+		(size 30.48 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 225 255 225 1)
+		)
+		(uuid "c3d4e5f6-a7b8-9012-cdef-012345678901")
+		(property "Sheetname" "Sensors"
+			(at 63.5 177.0884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "sensors.kicad_sch"
+			(at 63.5 193.6146 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+	)
+
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

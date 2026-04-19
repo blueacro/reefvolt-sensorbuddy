@@ -1,0 +1,35 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "b2c3d4e5-f6a7-8901-bcde-f01234567890")
+	(paper "A3")
+	(title_block
+		(title "ReefVolt SensorBuddy — Power Supply")
+		(date "2026-04-18")
+		(rev "0.1")
+		(comment 1 "12-24V DC → TPS54202 5V → LM1117 3.3V")
+		(comment 2 "Input protection: SS14 reverse polarity + TVS")
+	)
+	(lib_symbols
+	)
+
+	(text "Power Supply\n\n12-24V DC input (barrel jack + Phoenix COMBICON)\n  → SS14 reverse polarity diode\n  → TVS overvoltage clamp\n  → 56µF 63V bulk cap\n  → TPS54202DDCR sync buck → 5V rail\n    (4.7µH inductor, 100k/22.1k FB divider)\n    → TCAN1044V, OLED carrier\n    → LM1117IMP-3.3 LDO → 3.3V rail\n      → ESP32-S3-MINI (~300mA peak)\n      → STM32G0B1 (~20mA)\n      → ADM3260 VDD1 (~10mA)\n\nADM3260 isoPower → ISO_3V3 (isolated)\n  → ADS1115, OPA2376, bias divider (~1.3mA total)"
+		(exclude_from_sim no)
+		(at 25.4 25.4 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "00000002-0001-0001-0001-000000000001")
+	)
+
+	(sheet_instances
+		(path "/b2c3d4e5-f6a7-8901-bcde-f01234567890"
+			(page "2")
+		)
+	)
+	(embedded_fonts no)
+)

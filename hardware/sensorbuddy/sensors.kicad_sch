@@ -1,0 +1,35 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "c3d4e5f6-a7b8-9012-cdef-012345678901")
+	(paper "A3")
+	(title_block
+		(title "ReefVolt SensorBuddy — Sensor Interfaces")
+		(date "2026-04-18")
+		(rev "0.1")
+		(comment 1 "Isolated pH/ORP probes, NTC, 1-Wire, float switches")
+		(comment 2 "ADM3260 isolation barrier + ADS1115 + OPA2376 buffer")
+	)
+	(lib_symbols
+	)
+
+	(text "Sensor Interfaces\n\nIsolated Probes (pH / ORP):\n  ADM3260ARSZ I2C isolator + isoPower → ISO_3V3 domain\n  OPA2376AIDR dual unity-gain buffer (2 channels)\n  ADS1115IDGST 16-bit differential ADC\n    AIN0/1: Probe A (BNC), AIN2/3: Probe B (BNC)\n  Mid-rail bias: 2× 100kΩ 0.1% divider + 0.1µF per channel\n  220Ω + 100pF output filter per buffer channel\n\nNTC Thermistors (×3):\n  3.3V → 10kΩ 0.1% fixed → STM32 ADC (PA0/PA1/PA4) → NTC → GND\n  0.1µF filter cap on each ADC input\n  Phoenix COMBICON 2-pos (1803277) per channel\n\n1-Wire DS18B20 (×2 buses):\n  STM32 USART2 (PA2) + USART3 (PA3), half-duplex\n  4.7kΩ pull-up, 100Ω series + 100pF damper\n  Phoenix COMBICON 3-pos (1803280) per bus\n  LwOW firmware library for ROM search + DS18B20\n\nFloat Switches (×4):\n  STM32 GPIO (PA5/PA6/PA7/PB0) with internal pull-up\n  100nF debounce cap per channel\n  Phoenix COMBICON 2-pos (1803277) per switch"
+		(exclude_from_sim no)
+		(at 25.4 25.4 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "00000003-0001-0001-0001-000000000001")
+	)
+
+	(sheet_instances
+		(path "/c3d4e5f6-a7b8-9012-cdef-012345678901"
+			(page "3")
+		)
+	)
+	(embedded_fonts no)
+)
