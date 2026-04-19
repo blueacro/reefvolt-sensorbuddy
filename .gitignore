@@ -1,0 +1,27 @@
+# KiCad backup/autosave
+*.kicad_prl
+*-backups/
+_autosave-*
+*.bak
+*~
+
+# JLCPCB output (regenerated via make)
+hardware/*/jlcpcb/
+hardware/*/*-jlcpcb.zip
+
+# Generated docs
+hardware/*/docs/images/
+
+# ESPHome build artifacts
+firmware/**/.esphome/
+
+# Build outputs
+firmware/build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
