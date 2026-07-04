@@ -388,3 +388,51 @@ Screw terminals rated ≥10A for mains. Consider panel-mount IEC C14 inlet
 | Current shunt | 50mΩ 1% 1W | 2512 | 2 | Per-channel current sense |
 | CAN termination | 120Ω | 1210 | 1 | Jumper-selectable |
 | Relay flyback diode | SS14 | SMA | 1 | Master relay coil protection |
+
+---
+
+## Bill of Materials (JLCPCB assembly)
+
+Verified in-stock on LCSC (jlcsearch, 2026-07-04). All actives are JLC **Extended**
+(normal for this class); passives are **Basic** (no feeder fee). The `schgen`
+manifest (`scripts/plugcontrol.schgen.py`) carries these LCSC numbers as the
+source of truth — `make bom-plugcontrol` emits the assembly BOM.
+
+| Block | Ref | Part | LCSC | Pkg |
+|---|---|---|---|---|
+| MCU | U1 | STM32G0B1KBU6N | `C5159549` | UFQFPN-32 |
+| CAN | U2 | TCAN1044VDRQ1 | `C1852061` | SOIC-8 |
+| USB ESD | U3 | USBLC6-4SC6 | `C5197386` | SOT-23-6 |
+| Buck 5V | U4 | TPS54202DDCR | `C191884` | SOT-23-6 |
+| LDO 3V3 (MCU) | U5 | LM1117IMPX-3.3 | `C23984` | SOT-223 |
+| LDO 3V3 (safety) | U6 | LM1117IMPX-3.3 | `C23984` | SOT-223 (independent rail) |
+| Ref 3.0V | U7 | REF3330AIDBZT | `C2156496` | SOT-23-3 |
+| Dual comparator | U8 | TLV3202AIDR | `C129325` | SOIC-8 |
+| SR latch | U9 | SN74HC74DR | `C6762` | SOIC-14 (½ used, POR→fault) |
+| Watchdog | U10 | TPS3823-33DBVR | `C7719` | SOT-23-5 |
+| Quad AND (gating) | U11 | SN74HC08DR | `C337768` | SOIC-14 |
+| Current sense ×2 | U12, U13 | INA181A1IDBVR | `C2058943` | SOT-23-6 (gain 20) |
+| Master relay | K1 | Omron G5LE-14 5VDC | `C116963` | THT SPDT 10A (backup cutoff) |
+| SSR ×2 | K2, K3 | Panasonic AQH / Sharp S216 | *TBD* | DIP-6 placeholder (zero-cross, 5V ctrl) |
+| Relay FET | Q1 | AO3400A | `C20917` | SOT-23 |
+| Buck L | L1 | SRN4018-4R7M | `C408412` | 4.7µH |
+| Rev-prot / flyback | D1, D6 | SS14 | `C2480` | SMA |
+| Diode-OR (fault) | D4, D5 | 1N4148W | `C81598` | SOD-123 |
+| USB-C | J1 | HRO TYPE-C-31-M-12 | `C165948` | 16P |
+
+Passives (Basic): 0402 R/C decoupling; buck FB 100k/22.1k; USB-C 5.1k CC; LED
+series; buck/LDO caps 1210; **safety-chain divider + threshold resistors 0603
+0.1% 25ppm** (R30–R34 — pick verified 0.1% MPNs at assembly, LCSC left blank);
+**current-sense shunts R50/R51 50mΩ 1W 2512** (LCSC blank — select final part);
+120Ω CAN term. SSR (K2/K3) part number is **TBD** per DESIGN (Panasonic AQH vs
+Sharp S216) — LCSC/footprint finalized once selected; DIP-6 is a placeholder.
+
+**Symbol substitutions** (value/LCSC/MPN carry the real part; symbol is cosmetic
+for the placed-not-wired skeleton): TLV3202→`Comparator:LMV393`,
+SN74HC08→`74xx:74LS08`, REF3330→`Reference_Voltage:REF3030`,
+TPS3823-33→`Power_Supervisor:TPS3823-xxDBV`, SSR→`Relay_SolidState:AQH0213A`.
+
+**Assembly strategy:** Economic (top-only SMD). The **STM32G0B1** is the only
+supply-watch item (whole line depends on it). Connectors (CAN Micro-Fit, Phoenix
+DC-in/NTC, AC mains screw terminals) and the THT master relay + SSRs are
+hand-soldered — see `plugcontrol-handsolder.txt`.

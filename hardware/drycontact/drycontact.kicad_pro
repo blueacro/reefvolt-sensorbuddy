@@ -506,7 +506,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "sensorbuddy.kicad_pro",
+    "filename": "drycontact.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -690,9 +690,9 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "sensorbuddy.kicad_sch",
-        "name": "sensorbuddy",
-        "uuid": "a1b2c3d4-e5f6-7890-abcd-ef0123456789"
+        "filename": "drycontact.kicad_sch",
+        "name": "drycontact",
+        "uuid": "d0000000-0000-4dc0-8000-000000000001"
       }
     ],
     "used_designators": "",
@@ -700,20 +700,20 @@
   },
   "sheets": [
     [
-      "a1b2c3d4-e5f6-7890-abcd-ef0123456789",
-      "sensorbuddy"
+      "d0000000-0000-4dc0-8000-000000000001",
+      "drycontact"
     ],
     [
-      "60616715-fac0-4cb1-8f3a-152589cd21b7",
-      "MAIN"
+      "6aadac48-35b5-4227-8ed5-9dbae3a8cee2",
+      "MCU"
     ],
     [
-      "f52a4ed5-c1a0-4069-8c26-21979fcdfc09",
-      "PSU"
+      "345e2863-c1ad-4a65-acd6-35ac944868d2",
+      "PWR"
     ],
     [
-      "e6486b85-78f9-450f-a2bc-d1e34aad41de",
-      "SENSORS"
+      "b05191d9-8017-47f0-80ab-246cabb273f0",
+      "Relays"
     ]
   ],
   "text_variables": {},

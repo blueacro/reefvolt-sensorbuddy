@@ -2,10 +2,10 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid "f52a4ed5-c1a0-4069-8c26-21979fcdfc09")
+	(uuid "345e2863-c1ad-4a65-acd6-35ac944868d2")
 	(paper "A3")
 	(title_block
-		(title "ReefVolt SensorBuddy — Main — Power: 12-24V -> TPS54202 5V -> LM1117 3.3V (+ barrel/Phoenix in)")
+		(title "ReefVolt DryContact — 4ch Form-C carrier — Power: 12-24V (CAN bus) -> TPS54202 5V -> LM1117 3.3V")
 		(date "2026-07-04")
 		(rev "0.1")
 		(company "blueAcro / ReefVolt")
@@ -972,8 +972,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "88004771-ed9f-4843-89a9-990c78dbd404")
-		(property "Reference" "U5"
+		(uuid "8f2fdc6e-fbd3-4e2c-8910-009cd79a7e22")
+		(property "Reference" "U4"
 			(at 49.5300 53.3400 0)
 			(effects (font (size 1.27 1.27)) (justify left))
 		)
@@ -1001,16 +1001,16 @@
 			(at 45.7200 55.8800 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "2" (uuid "a15d49bc-2f34-48cb-99f9-64c03c7c9ade"))
-		(pin "3" (uuid "e04ae998-37f6-45fc-819e-4449e5d043e7"))
-		(pin "1" (uuid "bfa2dc05-69fe-4b6c-a021-ea1946bbf209"))
-		(pin "4" (uuid "8285f838-e3ec-49ef-8948-160c705a0e17"))
-		(pin "5" (uuid "8b0d6e99-8f97-4f6a-ac8d-10e7fa4776b6"))
-		(pin "6" (uuid "d5b31b33-ad97-40c2-a579-27408af8dd6a"))
+		(pin "2" (uuid "10239b33-9b58-49e5-a728-e9d308364e6d"))
+		(pin "3" (uuid "687ad7fa-404f-436f-a677-1247b188729e"))
+		(pin "1" (uuid "74488697-6553-4686-9ac8-a8cfec5b9854"))
+		(pin "4" (uuid "15315078-c7d4-4ac9-b425-ee9e13ebee01"))
+		(pin "5" (uuid "e58dcc7e-f65b-4417-9e92-7c6885584c9d"))
+		(pin "6" (uuid "5a4a89c1-08ec-4981-82c3-67ba80feeccf"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
-					(reference "U5")
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
+					(reference "U4")
 					(unit 1)
 				)
 			)
@@ -1024,8 +1024,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6eb6bc76-f474-4e23-a349-53b73923dbc1")
-		(property "Reference" "U6"
+		(uuid "d7f3a09c-d725-4e8f-a3ec-6e335a3c3c32")
+		(property "Reference" "U5"
 			(at 146.0500 53.3400 0)
 			(effects (font (size 1.27 1.27)) (justify left))
 		)
@@ -1053,14 +1053,14 @@
 			(at 142.2400 55.8800 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "3" (uuid "a03da1b0-89d5-4d17-b67a-bc767ff428f3"))
-		(pin "2" (uuid "245b7bdc-799d-4d56-9bfb-51331b0d54ae"))
-		(pin "1" (uuid "f414ddc4-584b-45cb-be7e-9cb583283589"))
-		(pin "4" (uuid "39299675-49d2-421b-ac6b-e3c82abe437d"))
+		(pin "3" (uuid "4bdb00dd-f59c-41f8-acd5-fda89062f1c3"))
+		(pin "2" (uuid "c8f08de0-d3e1-423c-b953-67f5beac11f0"))
+		(pin "1" (uuid "5e1f1a7a-7ba1-40ec-83bf-4e58457c581b"))
+		(pin "4" (uuid "304c6646-c39a-4986-a984-e95849d790d1"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
-					(reference "U6")
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
+					(reference "U5")
 					(unit 1)
 				)
 			)
@@ -1074,8 +1074,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f2b74f5a-4377-4e2c-b3ef-f10cd9bf6f0c")
-		(property "Reference" "J4"
+		(uuid "631b00a5-7784-4097-a5d5-577d60579b17")
+		(property "Reference" "J3"
 			(at 242.5700 53.3400 0)
 			(effects (font (size 1.27 1.27)) (justify left))
 		)
@@ -1099,12 +1099,12 @@
 			(at 238.7600 55.8800 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "1" (uuid "697bb251-8f2e-41d8-a17b-0301b5554f55"))
-		(pin "2" (uuid "1ec85ff9-cf13-4384-8f18-bc3f73309915"))
+		(pin "1" (uuid "96523139-5058-4646-ada6-d6c84b7108a8"))
+		(pin "2" (uuid "dbd9c77a-cdfd-4898-9734-fe432ba917d3"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
-					(reference "J4")
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
+					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -1118,7 +1118,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a9707021-f41c-4d9d-89ab-ae7dca554f7f")
+		(uuid "851d0c31-a152-42d1-8562-ab3a8b1a7b13")
 		(property "Reference" "L1"
 			(at 34.2900 119.3800 0)
 			(effects (font (size 1.27 1.27)) (justify left))
@@ -1147,11 +1147,11 @@
 			(at 30.4800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "1" (uuid "886ae376-f1fe-4d53-a5cc-4888d0bf041a"))
-		(pin "2" (uuid "fa1b73ac-db08-423d-b890-09f0273fb4b3"))
+		(pin "1" (uuid "26c7d2d0-fcbf-4c3f-a983-56bfb9eded2c"))
+		(pin "2" (uuid "9f876d62-0ece-448b-a0d0-ef80bab581a9"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
 					(reference "L1")
 					(unit 1)
 				)
@@ -1166,7 +1166,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "df0de475-3a37-484a-a8f7-33f085280c4e")
+		(uuid "1f098eee-868a-489c-b83e-e01adfb04f09")
 		(property "Reference" "D3"
 			(at 72.3900 119.3800 0)
 			(effects (font (size 1.27 1.27)) (justify left))
@@ -1195,11 +1195,11 @@
 			(at 68.5800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "1" (uuid "2e868184-4aa7-4076-adcb-69a75940e5a4"))
-		(pin "2" (uuid "01ad72b4-8ecc-4acb-8abd-5a04223dcbe7"))
+		(pin "1" (uuid "4f49ece5-d48a-4531-9f97-13e7d220ed28"))
+		(pin "2" (uuid "af2c4792-4cfd-41d3-b005-ec624a5b0275"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
 					(reference "D3")
 					(unit 1)
 				)
@@ -1214,7 +1214,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "bc99f443-11f5-4220-ba50-9a091cda6152")
+		(uuid "e18e7827-eb37-4818-8f72-29da1983d187")
 		(property "Reference" "C10"
 			(at 110.4900 119.3800 0)
 			(effects (font (size 1.27 1.27)) (justify left))
@@ -1231,15 +1231,15 @@
 			(at 106.6800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(property "LCSC" "C19666"
+		(property "LCSC" "C1611"
 			(at 106.6800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "1" (uuid "07a05741-cd73-4014-bc06-4413489789e0"))
-		(pin "2" (uuid "b57253ff-6c6b-4231-a060-b205045d4b69"))
+		(pin "1" (uuid "d43527a2-1a35-4ac0-b9f4-f9d81ba8459f"))
+		(pin "2" (uuid "a1ce9f85-dc95-4b43-add1-698287846885"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
 					(reference "C10")
 					(unit 1)
 				)
@@ -1254,7 +1254,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "43c99a3d-19bd-44ba-b67c-36125622e424")
+		(uuid "7ae57b5e-eead-4df7-91bf-fea38c0ec0c8")
 		(property "Reference" "C11"
 			(at 148.5900 119.3800 0)
 			(effects (font (size 1.27 1.27)) (justify left))
@@ -1275,11 +1275,11 @@
 			(at 144.7800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "1" (uuid "30eba698-abd5-4556-bb4e-dcab22bb3515"))
-		(pin "2" (uuid "c9f59780-cf85-48f9-a538-5340f0e62565"))
+		(pin "1" (uuid "c7362f6b-7cf0-41ec-ba75-6d58cac4f888"))
+		(pin "2" (uuid "004320aa-eac1-4d6b-9c80-7ba0365dac4d"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
 					(reference "C11")
 					(unit 1)
 				)
@@ -1294,7 +1294,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b44b9195-8800-4cf4-b63d-6f0c3ea8df53")
+		(uuid "a0ac68bc-c3a3-4db0-885c-c25127a96b7b")
 		(property "Reference" "C12"
 			(at 186.6900 119.3800 0)
 			(effects (font (size 1.27 1.27)) (justify left))
@@ -1315,11 +1315,11 @@
 			(at 182.8800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "1" (uuid "9fc4db27-e82f-4961-afbc-fc32a267186d"))
-		(pin "2" (uuid "d981fd5b-314e-4e6b-b849-8f4e2a86af20"))
+		(pin "1" (uuid "8c2b766a-ad60-4461-846c-6cf332f1811b"))
+		(pin "2" (uuid "787766f9-9d6d-468c-91de-8cc7ee622ee2"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
 					(reference "C12")
 					(unit 1)
 				)
@@ -1334,7 +1334,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6885e33c-0ab6-4998-b123-d60e231aca2b")
+		(uuid "dfc642db-2600-4cf4-9ede-66c0f8758d25")
 		(property "Reference" "C13"
 			(at 224.7900 119.3800 0)
 			(effects (font (size 1.27 1.27)) (justify left))
@@ -1343,7 +1343,7 @@
 			(at 224.7900 124.4600 0)
 			(effects (font (size 1.27 1.27)) (justify left))
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 220.9800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
@@ -1351,15 +1351,15 @@
 			(at 220.9800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(property "LCSC" "C14663"
+		(property "LCSC" "C1525"
 			(at 220.9800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "1" (uuid "5f86eaa1-26c8-4076-bcbb-7a8a0af54b41"))
-		(pin "2" (uuid "c28ed1f9-b710-4c16-b35c-b8f71711794a"))
+		(pin "1" (uuid "8896dda7-4c0d-4df3-b7d2-6fb895506f5a"))
+		(pin "2" (uuid "754da527-d26f-421a-9849-3b2ee6f8ea5c"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
 					(reference "C13")
 					(unit 1)
 				)
@@ -1374,7 +1374,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c7ab0d10-0aa1-464f-8dba-4a6dfe7f4b3e")
+		(uuid "294fb0a0-1024-440e-9e31-6bde1230d85e")
 		(property "Reference" "R10"
 			(at 262.8900 119.3800 0)
 			(effects (font (size 1.27 1.27)) (justify left))
@@ -1383,7 +1383,7 @@
 			(at 262.8900 124.4600 0)
 			(effects (font (size 1.27 1.27)) (justify left))
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 259.0800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
@@ -1391,15 +1391,15 @@
 			(at 259.0800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(property "LCSC" "C25803"
+		(property "LCSC" "C25741"
 			(at 259.0800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "1" (uuid "0c3bb0c3-97ab-4d68-b4dd-3077a4069d72"))
-		(pin "2" (uuid "1f74f3ea-0e1f-4619-ad6f-8e32fe61b773"))
+		(pin "1" (uuid "e4018a00-98a7-4d38-a79b-65bcbfed782b"))
+		(pin "2" (uuid "136d429e-03ee-4c6b-bc1b-ecab42a7d821"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
 					(reference "R10")
 					(unit 1)
 				)
@@ -1414,7 +1414,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6856333b-34f9-42b0-a112-19dc5487f7b8")
+		(uuid "bd6c3221-9e82-4496-8a81-9b03e83c1e04")
 		(property "Reference" "R11"
 			(at 300.9900 119.3800 0)
 			(effects (font (size 1.27 1.27)) (justify left))
@@ -1423,7 +1423,7 @@
 			(at 300.9900 124.4600 0)
 			(effects (font (size 1.27 1.27)) (justify left))
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 297.1800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
@@ -1435,26 +1435,26 @@
 			(at 297.1800 121.9200 0)
 			(effects (font (size 1.27 1.27))) (hide yes)
 		)
-		(pin "1" (uuid "9adef905-3272-4db8-9b75-52bcf7a51294"))
-		(pin "2" (uuid "0c307146-c45e-4dc6-bf9d-0d57ce17e6f4"))
+		(pin "1" (uuid "9f05541c-a356-446d-aeea-05ecafed2266"))
+		(pin "2" (uuid "91b078fb-b370-4edb-b6c7-60294c20ebca"))
 		(instances
-			(project "sensorbuddy"
-				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/f52a4ed5-c1a0-4069-8c26-21979fcdfc09"
+			(project "drycontact"
+				(path "/d0000000-0000-4dc0-8000-000000000001/345e2863-c1ad-4a65-acd6-35ac944868d2"
 					(reference "R11")
 					(unit 1)
 				)
 			)
 		)
 	)
-	(text "PSU — 12-24V -> 5V buck -> 3.3V LDO.  PLACED, not wired.\n J4 DC IN:  1 = V+ (12-24V)  2 = GND    D3 SS14 reverse-polarity (A=V+ K=VIN)\n U5 TPS54202 (SOT-23-6):  1 BOOT 2 VIN 3 EN 4 GND 5 FB 6 SW ;  C10 VIN  L1 4.7uH SW--5V  C11 22uF 5V\n   FB: R10 100k 5V--FB, R11 22.1k FB--GND (~5.0V) ;  C13 100nF BOOT--SW\n U6 LM1117-3.3 (SOT-223): 3 IN(5V) 2 OUT(3V3) 1 GND ;  C12 22uF 3V3\n RAILS:  5V -> TCAN1044, ADM3260 VDD1 ;  3V3 -> ESP32, STM32, USBLC6 VIO.  ISO_3V3 made on SENSORS sheet (ADM3260)."
+	(text "PWR — 12-24V (from J2/CAN bus) -> 5V buck -> 3.3V LDO.  PLACED, not wired.\n J3 DC IN:  1 = V+ (12-24V, = J2.4/6)   2 = GND     D3 SS14: A=V+ K=VIN  (reverse-polarity)\n U4 TPS54202 (SOT-23-6):  1 BOOT  2 VIN  3 EN  4 GND  5 FB  6 SW\n   C10 4.7uF VIN--GND   L1 4.7uH SW--5V   C11 22uF 5V--GND   C13 100nF BOOT--SW\n   FB divider: R10 100k 5V--FB , R11 22.1k FB--GND  (Vout = 0.596*(1+R10/R11) ~= 5.0V)\n U5 LM1117-3.3 (SOT-223):  1 GND/ADJ  2 OUT(3V3)  3 IN(5V)   C12 22uF 3V3--GND\n RAILS OUT:  5V -> relay coils (Relays sheet, ULN2003 COM) + TCAN1044 VCC ;  3V3 -> STM32, USBLC6 VIO"
 		(exclude_from_sim no)
 		(at 12.00 137.92 0)
 		(effects (font (size 1.5 1.5)) (justify left top))
-		(uuid "3bf2c067-98b0-439f-bc7b-d6099789195e")
+		(uuid "82d28b7a-2971-405f-a9df-859665227717")
 	)
 	(sheet_instances
 		(path "/"
-			(page "2")
+			(page "3")
 		)
 	)
 	(embedded_fonts no)

@@ -1,0 +1,10 @@
+# SensorBuddy — designators assembled BY HAND (excluded from JLCPCB BOM + CPL).
+# Through-hole connectors: BNC probes, Micro-Fit CAN, OLED header, Phoenix DC-in,
+# NTC/1-Wire/float terminal blocks. (USB-C J1 + SMD tactiles stay in assembly.)
+J2               # CAN Micro-Fit 3.0 6-pos
+J3               # OLED I2C 4-pin header
+J4               # DC in, Phoenix MPT 2-pos
+J5, J6           # pH / ORP probe BNC
+J7, J8, J9       # NTC thermistor inputs (Phoenix 2-pos)
+J10, J11         # 1-Wire DS18B20 buses (Phoenix 3-pos)
+J12, J13, J14, J15   # float switch inputs (Phoenix 2-pos)

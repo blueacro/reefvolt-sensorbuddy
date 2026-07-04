@@ -9,9 +9,8 @@ _autosave-*
 hardware/*/jlcpcb/
 hardware/*/*-jlcpcb.zip
 
-# Generated schematic SVGs (regenerated via make docs)
-hardware/*/docs/images/sensorbuddy*.svg
-hardware/*/docs/images/plugcontrol*.svg
+# Generated SVGs (regenerated via make docs)
+hardware/*/docs/images/*.svg
 
 # ESPHome build artifacts
 firmware/**/.esphome/
@@ -26,3 +25,7 @@ firmware/build/
 # OS
 .DS_Store
 Thumbs.db
+
+# Python bytecode from hardware/scripts generators
+__pycache__/
+*.pyc

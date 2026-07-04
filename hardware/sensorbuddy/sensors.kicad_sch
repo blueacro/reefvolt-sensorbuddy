@@ -2,32 +2,3061 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid "c3d4e5f6-a7b8-9012-cdef-012345678901")
+	(uuid "e6486b85-78f9-450f-a2bc-d1e34aad41de")
 	(paper "A3")
 	(title_block
-		(title "ReefVolt SensorBuddy — Sensor Interfaces")
-		(date "2026-04-18")
+		(title "ReefVolt SensorBuddy — Main — Isolated pH/ORP probes (ADM3260+ADS1115+OPA2376), NTC, 1-Wire, floats")
+		(date "2026-07-04")
 		(rev "0.1")
-		(comment 1 "Isolated pH/ORP probes, NTC, 1-Wire, float switches")
-		(comment 2 "ADM3260 isolation barrier + ADS1115 + OPA2376 buffer")
+		(company "blueAcro / ReefVolt")
 	)
 	(lib_symbols
-	)
-
-	(text "Sensor Interfaces\n\nIsolated Probes (pH / ORP):\n  ADM3260ARSZ I2C isolator + isoPower → ISO_3V3 domain\n  OPA2376AIDR dual unity-gain buffer (2 channels)\n  ADS1115IDGST 16-bit differential ADC\n    AIN0/1: Probe A (BNC), AIN2/3: Probe B (BNC)\n  Mid-rail bias: 2× 100kΩ 0.1% divider + 0.1µF per channel\n  220Ω + 100pF output filter per buffer channel\n\nNTC Thermistors (×3):\n  3.3V → 10kΩ 0.1% fixed → STM32 ADC (PA0/PA1/PA4) → NTC → GND\n  0.1µF filter cap on each ADC input\n  Phoenix COMBICON 2-pos (1803277) per channel\n\n1-Wire DS18B20 (×2 buses):\n  STM32 USART2 (PA2) + USART3 (PA3), half-duplex\n  4.7kΩ pull-up, 100Ω series + 100pF damper\n  Phoenix COMBICON 3-pos (1803280) per bus\n  LwOW firmware library for ROM search + DS18B20\n\nFloat Switches (×4):\n  STM32 GPIO (PA5/PA6/PA7/PB0) with internal pull-up\n  100nF debounce cap per channel\n  Phoenix COMBICON 2-pos (1803277) per switch"
-		(exclude_from_sim no)
-		(at 25.4 25.4 0)
-		(effects
-			(font
-				(size 2.54 2.54)
-			)
-			(justify left top)
+  (symbol "sensorbuddy:ADM3260ARSZ"
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (property "Reference" "U"
+      (at 0 15.24 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "ADM3260ARSZ"
+      (at 0 -15.24 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_SO:SSOP-20_5.3x7.2mm_P0.65mm"
+      (at 0 -17.78 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/ADM3260.pdf"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LCSC" "C658204"
+      (at 0 -20.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "ADM3260ARSZ-RL7"
+      (at 0 -22.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "Analog Devices"
+      (at 0 -25.4 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "Hot Swappable Dual I2C Isolator with Integrated DC-DC Converter, SSOP-20"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (symbol "ADM3260ARSZ_0_1"
+      (rectangle
+        (start -10.16 13.97)
+        (end 10.16 -13.97)
+        (stroke (width 0.254) (type default))
+        (fill (type background))
+      )
+      (polyline
+        (pts
+          (xy 0 13.97)
+          (xy 0 -13.97)
+        )
+        (stroke (width 0.254) (type dash))
+        (fill (type none))
+      )
+    )
+    (symbol "ADM3260ARSZ_1_1"
+      (pin power_in line
+        (at -12.7 10.16 0)
+        (length 2.54)
+        (name "VDD1" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin bidirectional line
+        (at -12.7 5.08 0)
+        (length 2.54)
+        (name "SCL1" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin bidirectional line
+        (at -12.7 0 0)
+        (length 2.54)
+        (name "SDA1" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin power_in line
+        (at -12.7 -10.16 0)
+        (length 2.54)
+        (name "GND1" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -12.7 -10.16 0)
+        (length 2.54)
+        (hide yes)
+        (name "NC" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -12.7 -10.16 0)
+        (length 2.54)
+        (hide yes)
+        (name "NC" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -12.7 -10.16 0)
+        (length 2.54)
+        (hide yes)
+        (name "NC" (effects (font (size 1.27 1.27))))
+        (number "7" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -12.7 -10.16 0)
+        (length 2.54)
+        (hide yes)
+        (name "GND1" (effects (font (size 1.27 1.27))))
+        (number "8" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -12.7 -10.16 0)
+        (length 2.54)
+        (hide yes)
+        (name "NC" (effects (font (size 1.27 1.27))))
+        (number "9" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -12.7 -10.16 0)
+        (length 2.54)
+        (hide yes)
+        (name "NC" (effects (font (size 1.27 1.27))))
+        (number "10" (effects (font (size 1.27 1.27))))
+      )
+      (pin power_in line
+        (at 12.7 -10.16 180)
+        (length 2.54)
+        (name "GND2" (effects (font (size 1.27 1.27))))
+        (number "11" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 12.7 -10.16 180)
+        (length 2.54)
+        (hide yes)
+        (name "NC" (effects (font (size 1.27 1.27))))
+        (number "12" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 12.7 -10.16 180)
+        (length 2.54)
+        (hide yes)
+        (name "NC" (effects (font (size 1.27 1.27))))
+        (number "13" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 12.7 -10.16 180)
+        (length 2.54)
+        (hide yes)
+        (name "GND2" (effects (font (size 1.27 1.27))))
+        (number "14" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 12.7 -10.16 180)
+        (length 2.54)
+        (hide yes)
+        (name "NC" (effects (font (size 1.27 1.27))))
+        (number "15" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 12.7 -10.16 180)
+        (length 2.54)
+        (hide yes)
+        (name "NC" (effects (font (size 1.27 1.27))))
+        (number "16" (effects (font (size 1.27 1.27))))
+      )
+      (pin power_out line
+        (at 12.7 10.16 180)
+        (length 2.54)
+        (name "VISO" (effects (font (size 1.27 1.27))))
+        (number "17" (effects (font (size 1.27 1.27))))
+      )
+      (pin bidirectional line
+        (at 12.7 0 180)
+        (length 2.54)
+        (name "SDA2" (effects (font (size 1.27 1.27))))
+        (number "18" (effects (font (size 1.27 1.27))))
+      )
+      (pin bidirectional line
+        (at 12.7 5.08 180)
+        (length 2.54)
+        (name "SCL2" (effects (font (size 1.27 1.27))))
+        (number "19" (effects (font (size 1.27 1.27))))
+      )
+      (pin power_in line
+        (at 12.7 -10.16 180)
+        (length 2.54)
+        (hide yes)
+        (name "GND2" (effects (font (size 1.27 1.27))))
+        (number "20" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+  (symbol "sensorbuddy:ADS1115IDGST"
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (property "Reference" "U"
+      (at 0 12.7 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "ADS1115IDGST"
+      (at 0 -12.7 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_SO:VSSOP-10_3x3mm_P0.5mm"
+      (at 0 -15.24 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/ads1115.pdf"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LCSC" "C468683"
+      (at 0 -17.78 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "ADS1115IDGST"
+      (at 0 -20.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "Texas Instruments"
+      (at 0 -22.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "16-Bit 860SPS 4-Ch Delta-Sigma ADC with I2C, PGA, Comparator, VSSOP-10"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (symbol "ADS1115IDGST_0_1"
+      (rectangle
+        (start -7.62 11.43)
+        (end 7.62 -11.43)
+        (stroke (width 0.254) (type default))
+        (fill (type background))
+      )
+    )
+    (symbol "ADS1115IDGST_1_1"
+      (pin input line
+        (at -10.16 7.62 0)
+        (length 2.54)
+        (name "AIN0" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin input line
+        (at -10.16 5.08 0)
+        (length 2.54)
+        (name "AIN1" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin input line
+        (at -10.16 2.54 0)
+        (length 2.54)
+        (name "AIN2" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin input line
+        (at -10.16 0 0)
+        (length 2.54)
+        (name "AIN3" (effects (font (size 1.27 1.27))))
+        (number "7" (effects (font (size 1.27 1.27))))
+      )
+      (pin input line
+        (at -10.16 -5.08 0)
+        (length 2.54)
+        (name "ADDR" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin bidirectional line
+        (at 10.16 5.08 180)
+        (length 2.54)
+        (name "SDA" (effects (font (size 1.27 1.27))))
+        (number "9" (effects (font (size 1.27 1.27))))
+      )
+      (pin input line
+        (at 10.16 2.54 180)
+        (length 2.54)
+        (name "SCL" (effects (font (size 1.27 1.27))))
+        (number "10" (effects (font (size 1.27 1.27))))
+      )
+      (pin output line
+        (at 10.16 -2.54 180)
+        (length 2.54)
+        (name "ALERT/RDY" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin power_in line
+        (at 0 13.97 270)
+        (length 2.54)
+        (name "VDD" (effects (font (size 1.27 1.27))))
+        (number "8" (effects (font (size 1.27 1.27))))
+      )
+      (pin power_in line
+        (at 0 -13.97 90)
+        (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+  (symbol "sensorbuddy:OPA2376AIDR"
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (property "Reference" "U"
+      (at 0 10.16 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "OPA2376AIDR"
+      (at 0 -10.16 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+      (at 0 -12.7 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/opa2376.pdf"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LCSC" "C46316"
+      (at 0 -15.24 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "OPA2376AIDR"
+      (at 0 -17.78 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "Texas Instruments"
+      (at 0 -20.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "Dual Low-Noise Low-Quiescent-Current Precision Operational Amplifier, SOIC-8"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (symbol "OPA2376AIDR_0_1"
+      (rectangle
+        (start -7.62 8.89)
+        (end 7.62 -8.89)
+        (stroke (width 0.254) (type default))
+        (fill (type background))
+      )
+    )
+    (symbol "OPA2376AIDR_1_1"
+      (pin input line
+        (at -10.16 5.08 0)
+        (length 2.54)
+        (name "1IN+" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin input line
+        (at -10.16 2.54 0)
+        (length 2.54)
+        (name "1IN-" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin input line
+        (at -10.16 -2.54 0)
+        (length 2.54)
+        (name "2IN+" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin input line
+        (at -10.16 -5.08 0)
+        (length 2.54)
+        (name "2IN-" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin output line
+        (at 10.16 5.08 180)
+        (length 2.54)
+        (name "1OUT" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin output line
+        (at 10.16 -5.08 180)
+        (length 2.54)
+        (name "2OUT" (effects (font (size 1.27 1.27))))
+        (number "7" (effects (font (size 1.27 1.27))))
+      )
+      (pin power_in line
+        (at 0 11.43 270)
+        (length 2.54)
+        (name "V+" (effects (font (size 1.27 1.27))))
+        (number "8" (effects (font (size 1.27 1.27))))
+      )
+      (pin power_in line
+        (at 0 -11.43 90)
+        (length 2.54)
+        (name "V-" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+	(symbol "Connector_Generic:Conn_01x02"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
 		)
-		(uuid "00000003-0001-0001-0001-000000000001")
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x02_1_1"
+			(rectangle
+				(start -1.27 1.27)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
 	)
-
+	(symbol "Connector_Generic:Conn_01x03"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x03"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x03_1_1"
+			(rectangle
+				(start -1.27 3.81)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 2.667)
+				(end 0 2.413)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 2.54 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	(symbol "Connector:Conn_Coaxial"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0.254 3.048 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_Coaxial"
+			(at 2.921 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "BNC SMA SMB SMC LEMO coaxial connector CINCH RCA MCX MMCX U.FL UMRF"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*BNC* *SMA* *SMB* *SMC* *Cinch* *LEMO* *UMRF* *MCX* *U.FL*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_Coaxial_0_1"
+			(polyline
+				(pts
+					(xy -2.54 0) (xy -0.508 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(arc
+				(start 1.778 0)
+				(mid 0.222 -1.8079)
+				(end -1.778 -0.508)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(arc
+				(start -1.778 0.508)
+				(mid 0.2221 1.8084)
+				(end 1.778 0)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 0 0)
+				(radius 0.508)
+				(stroke
+					(width 0.2032)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 -2.54) (xy 0 -1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Conn_Coaxial_1_1"
+			(pin passive line
+				(at -5.08 0 0)
+				(length 2.54)
+				(name "In"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -5.08 90)
+				(length 2.54)
+				(name "Ext"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	(symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	(symbol "Device:C"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "C"
+			(at 0.635 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C"
+			(at 0.635 -2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 0.9652 -3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "cap capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "C_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "C_0_1"
+			(polyline
+				(pts
+					(xy -2.032 0.762) (xy 2.032 0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.032 -0.762) (xy 2.032 -0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "C_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	)
+	(symbol
+		(lib_id "sensorbuddy:ADM3260ARSZ")
+		(at 45.7200 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "dc3410af-7f15-4db1-8619-edab4bc3beeb")
+		(property "Reference" "U7"
+			(at 49.5300 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "ADM3260ARSZ"
+			(at 49.5300 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Package_SO:SSOP-20_3.9x8.7mm_P0.635mm"
+			(at 45.7200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 45.7200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C208558"
+			(at 45.7200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "ADM3260ARSZ-RL7"
+			(at 45.7200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "ADI"
+			(at 45.7200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "90f33d91-d620-4ab7-b27c-248291bb78cc"))
+		(pin "2" (uuid "f3548102-b4af-43e3-9d5f-3a4bf0b3149c"))
+		(pin "3" (uuid "1405d6fb-fa56-4449-a588-30bc943693bc"))
+		(pin "4" (uuid "f3ef9d06-71b7-44b6-9349-dba431880972"))
+		(pin "5" (uuid "695d2529-46e5-4805-9457-467665169965"))
+		(pin "6" (uuid "92c39040-0146-4b56-9a33-0a8be9495937"))
+		(pin "7" (uuid "2292ec4c-b65c-4c3a-83f3-a09fe8d0be41"))
+		(pin "8" (uuid "d047cae4-2669-4864-aac8-fb9f96d70967"))
+		(pin "9" (uuid "a4be3a05-0718-4c3a-a9e8-a5c1c5a16783"))
+		(pin "10" (uuid "015c80dc-4b32-471f-a731-440bc1fe5080"))
+		(pin "11" (uuid "5edf284b-84a8-4d29-b1d4-0a074404c132"))
+		(pin "12" (uuid "d762cdbf-086e-43a4-be83-851f4e4c7e5f"))
+		(pin "13" (uuid "97871b15-ef78-439b-807c-a15bcacdede0"))
+		(pin "14" (uuid "d49dcacd-83de-4597-b8c5-b6efe4184ce0"))
+		(pin "15" (uuid "5b150631-e8ac-4210-b92c-c5ba4ccc1be1"))
+		(pin "16" (uuid "94c26ac5-2205-4884-a9fe-05286df59f24"))
+		(pin "17" (uuid "447ef6ec-8d4c-4e37-bde7-dfe7c8e59237"))
+		(pin "18" (uuid "868a044c-4fa7-4d71-9f88-15e2bc86d70f"))
+		(pin "19" (uuid "3b3bcdf0-6f2a-4cfb-bfa1-45602e7ecff6"))
+		(pin "20" (uuid "e5a7a518-2dcb-4992-9e80-664f64d5b0f8"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "U7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "sensorbuddy:ADS1115IDGST")
+		(at 142.2400 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fd70df2f-9b73-423b-81ff-5f3637b2d2f7")
+		(property "Reference" "U8"
+			(at 146.0500 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "ADS1115IDGST"
+			(at 146.0500 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Package_SO:VSSOP-10_3x3mm_P0.5mm"
+			(at 142.2400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 142.2400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C468683"
+			(at 142.2400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "ADS1115IDGST"
+			(at 142.2400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "TI"
+			(at 142.2400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "4" (uuid "47df10fd-8970-4565-8222-8fd98269671c"))
+		(pin "5" (uuid "d13558bd-148b-423b-ba3f-ebde29852833"))
+		(pin "6" (uuid "4ad589f2-b1ac-47f5-9245-e0c02e108794"))
+		(pin "7" (uuid "9f46222b-7ea0-4a71-a1a2-f00ce5445296"))
+		(pin "1" (uuid "af5451cc-4a3c-41c8-ad5b-4441a22ddd31"))
+		(pin "9" (uuid "07a61620-36b4-433c-9caf-f82d8e1f0bd1"))
+		(pin "10" (uuid "46949819-e93b-458d-8bc8-0d4d325a33b8"))
+		(pin "2" (uuid "4c6d9578-2622-4c3c-b072-cc525f9e9c33"))
+		(pin "8" (uuid "1f33ea7c-2883-49b6-bc1d-eca6890ec210"))
+		(pin "3" (uuid "1aec0d7e-4eb3-4b9b-8bf8-622268b89dec"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "U8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "sensorbuddy:OPA2376AIDR")
+		(at 238.7600 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "cf23d200-8d8b-4b57-87c8-caa46677d531")
+		(property "Reference" "U9"
+			(at 242.5700 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "OPA2376AIDR"
+			(at 242.5700 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+			(at 238.7600 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 238.7600 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C46316"
+			(at 238.7600 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "OPA2376AIDR"
+			(at 238.7600 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "TI"
+			(at 238.7600 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "3" (uuid "28a37262-57aa-4241-8845-ff408bfed921"))
+		(pin "2" (uuid "2227a3a7-c39e-4edb-b05b-575e08dd7770"))
+		(pin "5" (uuid "143c3e39-5b2a-4464-ae4f-798b09f5a8f0"))
+		(pin "6" (uuid "bafe30a5-863f-4de1-812c-aa9a753e3029"))
+		(pin "1" (uuid "066aeb1a-49b8-4d20-b87a-3099010bbff8"))
+		(pin "7" (uuid "a9d3a874-7ce2-4fae-8d8c-979b57d5c75d"))
+		(pin "8" (uuid "0e45460c-aee8-4d7f-be9c-5d26a06a51bd"))
+		(pin "4" (uuid "488bd7e4-5087-4a99-bd0f-60a7a95e590c"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "U9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 335.2800 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d5a19c10-95fd-4847-9c24-7f8acc46f34c")
+		(property "Reference" "J7"
+			(at 339.0900 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "NTC1"
+			(at 339.0900 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal"
+			(at 335.2800 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 335.2800 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "MPT-0,5/2-2,54"
+			(at 335.2800 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "Phoenix"
+			(at 335.2800 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "684b8df5-6eb1-4093-9b53-ad3147189bfa"))
+		(pin "2" (uuid "0a121565-8924-46ae-9886-c05bdce4129f"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 431.8000 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9adda060-5ed4-430b-8d30-4f985a092462")
+		(property "Reference" "J8"
+			(at 435.6100 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "NTC2"
+			(at 435.6100 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal"
+			(at 431.8000 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 431.8000 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "MPT-0,5/2-2,54"
+			(at 431.8000 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "Phoenix"
+			(at 431.8000 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "3a02e265-2a7f-49e1-8090-bee8ea742c8e"))
+		(pin "2" (uuid "191c4d3a-7fe3-424e-b323-6bfe5fb09687"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 528.3200 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "dd1b7cc4-91a6-46d8-85cc-79c96a8c7f19")
+		(property "Reference" "J9"
+			(at 532.1300 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "NTC3"
+			(at 532.1300 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal"
+			(at 528.3200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 528.3200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "MPT-0,5/2-2,54"
+			(at 528.3200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "Phoenix"
+			(at 528.3200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "bf6ff409-3b19-4f07-92f6-55b71bec5c48"))
+		(pin "2" (uuid "b726cdaf-ec2c-476c-9eab-351332c65f59"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x03")
+		(at 624.8400 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b8905ce6-ceb1-4b8e-9ef2-5ed9d98dc345")
+		(property "Reference" "J10"
+			(at 628.6500 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "1-Wire A"
+			(at 628.6500 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-3-2.54_1x03_P2.54mm_Horizontal"
+			(at 624.8400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 624.8400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "MPT-0,5/3-2,54"
+			(at 624.8400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "Phoenix"
+			(at 624.8400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "7b338be9-16bf-42af-ad35-11ef48f022fa"))
+		(pin "2" (uuid "7571ca51-60d1-4d8f-9e5f-358497724193"))
+		(pin "3" (uuid "b825c4f8-dbe5-4de1-b6af-540e67d746d9"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x03")
+		(at 721.3600 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "373f4d0e-22dd-41c2-b6f2-753b7e3ec19e")
+		(property "Reference" "J11"
+			(at 725.1700 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "1-Wire B"
+			(at 725.1700 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-3-2.54_1x03_P2.54mm_Horizontal"
+			(at 721.3600 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 721.3600 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "MPT-0,5/3-2,54"
+			(at 721.3600 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "Phoenix"
+			(at 721.3600 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "0568589a-a569-44f9-bf6e-c781c15f6a73"))
+		(pin "2" (uuid "272b72fd-433b-4017-868b-dd92cb0460dd"))
+		(pin "3" (uuid "65730bc4-3b5b-440c-ab9c-4a0644eae5b9"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 817.8800 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d32e4255-fe48-471b-96f2-4ecabd82a2d9")
+		(property "Reference" "J12"
+			(at 821.6900 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "FLOAT1"
+			(at 821.6900 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal"
+			(at 817.8800 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 817.8800 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "MPT-0,5/2-2,54"
+			(at 817.8800 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "Phoenix"
+			(at 817.8800 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "b785dac4-d4d7-46b7-8012-8516ea2fbe90"))
+		(pin "2" (uuid "21e27a37-423f-49cb-99f2-1e313be6e09d"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 914.4000 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7200cc91-82ce-4b64-8ca3-7cc83bdcccf2")
+		(property "Reference" "J13"
+			(at 918.2100 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "FLOAT2"
+			(at 918.2100 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal"
+			(at 914.4000 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 914.4000 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "MPT-0,5/2-2,54"
+			(at 914.4000 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "Phoenix"
+			(at 914.4000 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "331700f8-d517-41cc-b4a0-6f6cb5ffb02a"))
+		(pin "2" (uuid "b3adae5d-bd7e-4198-a7a4-ff170caee877"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 1010.9200 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a82192cc-90df-4968-9087-c50f809a7c05")
+		(property "Reference" "J14"
+			(at 1014.7300 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "FLOAT3"
+			(at 1014.7300 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal"
+			(at 1010.9200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 1010.9200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "MPT-0,5/2-2,54"
+			(at 1010.9200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "Phoenix"
+			(at 1010.9200 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "6fa451d4-1742-4fc2-8851-0e6f96053ff5"))
+		(pin "2" (uuid "a24073fe-0368-4527-ba77-742326e5d822"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 1107.4400 55.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c95dc678-e76d-434b-8251-05fe192b4df2")
+		(property "Reference" "J15"
+			(at 1111.2500 53.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "FLOAT4"
+			(at 1111.2500 58.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal"
+			(at 1107.4400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 1107.4400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "MPT-0,5/2-2,54"
+			(at 1107.4400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "Phoenix"
+			(at 1107.4400 55.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "023266e7-5447-4bfe-9722-126ce4bab0ea"))
+		(pin "2" (uuid "6aa3fef6-6628-4fb5-976f-cc7baa973428"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_Coaxial")
+		(at 30.4800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "328d2651-a08e-4633-960e-5e6c3010dece")
+		(property "Reference" "J5"
+			(at 34.2900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "PROBE 1 BNC"
+			(at 34.2900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Connector_Coaxial:BNC_Amphenol_B6252HB-NPP3G-50_Horizontal"
+			(at 30.4800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 30.4800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "BNC-vert"
+			(at 30.4800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "generic"
+			(at 30.4800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "a738caf0-8573-44fc-b910-543b38893b0f"))
+		(pin "2" (uuid "f834eba6-f06e-43e7-a059-8dc0b868d879"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 68.5800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "38000ba5-ff16-46fd-9fcb-ebb2eec4f318")
+		(property "Reference" "R20"
+			(at 72.3900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100k"
+			(at 72.3900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 68.5800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 68.5800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C25803"
+			(at 68.5800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "ed9c030f-dbbf-44a0-9b5c-2779a03ece86"))
+		(pin "2" (uuid "d228648d-e004-4ecc-9a14-fda3550e0bfd"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 106.6800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1ca9ee24-66f7-4c1a-8883-9b442ad15d6c")
+		(property "Reference" "R21"
+			(at 110.4900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100k"
+			(at 110.4900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 106.6800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 106.6800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C25803"
+			(at 106.6800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "79f34a98-ee19-4238-b331-00cb3701d433"))
+		(pin "2" (uuid "7673a993-d586-4436-a55d-fd224fdaccf3"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 144.7800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9ca35249-2378-42f7-9a3f-dde75df08d87")
+		(property "Reference" "R24"
+			(at 148.5900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "220R"
+			(at 148.5900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 144.7800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 144.7800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C22962"
+			(at 144.7800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "e9409ca5-5241-4043-b022-bc52e9168703"))
+		(pin "2" (uuid "fa0994a0-8bd6-40c7-85b0-2c23e1772b59"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 182.8800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "caaabf5b-98bf-4321-bbac-021aad2e92f9")
+		(property "Reference" "C20"
+			(at 186.6900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100pF"
+			(at 186.6900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 182.8800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 182.8800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14858"
+			(at 182.8800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "ca05c7ed-c399-416f-bd92-b7e1b14788ab"))
+		(pin "2" (uuid "38253f2d-c728-48e2-9405-d9c02906e198"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_Coaxial")
+		(at 220.9800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e4868fd1-7e01-4bfb-8648-65b60c9f192a")
+		(property "Reference" "J6"
+			(at 224.7900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "PROBE 2 BNC"
+			(at 224.7900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Connector_Coaxial:BNC_Amphenol_B6252HB-NPP3G-50_Horizontal"
+			(at 220.9800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 220.9800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "MPN" "BNC-vert"
+			(at 220.9800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Manufacturer" "generic"
+			(at 220.9800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "a5cfc0a2-25cc-468c-b1ed-c1587f0f5701"))
+		(pin "2" (uuid "f37ae5f9-ed09-47ff-bfb3-520d933ed291"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "J6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 259.0800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "12ca046e-a363-4d90-96c4-810c61581956")
+		(property "Reference" "R22"
+			(at 262.8900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100k"
+			(at 262.8900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 259.0800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 259.0800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C25803"
+			(at 259.0800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "abb641bd-5d1f-4412-a541-0fe0c7942799"))
+		(pin "2" (uuid "30b010f6-6381-4d7b-83cb-d32cc1209283"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 297.1800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "de2d27c9-34b4-444c-84a2-172bfc18beeb")
+		(property "Reference" "R23"
+			(at 300.9900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100k"
+			(at 300.9900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 297.1800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 297.1800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C25803"
+			(at 297.1800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "ca06fd76-ab9b-4e00-83b9-a78a746bb025"))
+		(pin "2" (uuid "1cbda548-8605-41da-9373-db0a8c47e681"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 335.2800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "432bfef8-a1c5-44cd-8262-439485165970")
+		(property "Reference" "R25"
+			(at 339.0900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "220R"
+			(at 339.0900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 335.2800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 335.2800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C22962"
+			(at 335.2800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "fd7bfb47-789d-498c-84db-d01acf8c5c35"))
+		(pin "2" (uuid "d253f817-de6c-4d64-b354-68af9e940f11"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 373.3800 121.9200 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7bc72ad7-d287-4023-aab2-ea9e4754402c")
+		(property "Reference" "C21"
+			(at 377.1900 119.3800 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100pF"
+			(at 377.1900 124.4600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 373.3800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 373.3800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14858"
+			(at 373.3800 121.9200 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "056b0804-687f-4d1a-b219-b0605c94e89c"))
+		(pin "2" (uuid "961ad7bf-d64b-48fa-a3a5-60e6134d1cba"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 30.4800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "02123598-157a-4aae-9d3e-591c7de2366a")
+		(property "Reference" "C22"
+			(at 34.2900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 34.2900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 30.4800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 30.4800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 30.4800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "230bd3dd-a4af-4e85-9331-d178daeec46c"))
+		(pin "2" (uuid "ce34a4e5-9602-4ff0-a6d2-ab4a603a0cab"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 68.5800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8d5ff7a4-7c0c-4bd8-8012-76d7e4a59e80")
+		(property "Reference" "C23"
+			(at 72.3900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 72.3900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 68.5800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 68.5800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 68.5800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "e6fc3fb6-4ab4-4c76-968e-58115e046d0a"))
+		(pin "2" (uuid "d52d3667-e038-49d7-ab23-d3ea8f913548"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 106.6800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d383ed27-236c-4e6a-a8ba-7ab1a9fca6b6")
+		(property "Reference" "C24"
+			(at 110.4900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 110.4900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 106.6800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 106.6800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 106.6800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "6bbfb678-5534-49c7-8515-056579ebf456"))
+		(pin "2" (uuid "81e3e1c4-b269-4965-864f-f8c1bd8457f9"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 144.7800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "62199c13-5f61-434c-984d-d771ed40c5ef")
+		(property "Reference" "C25"
+			(at 148.5900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "4.7uF"
+			(at 148.5900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+			(at 144.7800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 144.7800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C19666"
+			(at 144.7800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "7af1849e-7a96-434d-a8e2-63c5f7509996"))
+		(pin "2" (uuid "7e27a82d-e455-4c48-a0fc-e87e3e7b8f70"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 182.8800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4fe41266-6f23-4e9d-b3e0-1b67d7cb0b85")
+		(property "Reference" "C26"
+			(at 186.6900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 186.6900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 182.8800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 182.8800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 182.8800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "fafa91dc-bf4b-462e-9d97-c4d2a20f67f5"))
+		(pin "2" (uuid "53e19708-2b4d-4d67-a703-77391887b70f"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 220.9800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "0fd725df-3766-4167-abb2-52c38f2a847c")
+		(property "Reference" "R30"
+			(at 224.7900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "10k"
+			(at 224.7900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 220.9800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 220.9800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C25804"
+			(at 220.9800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "b32c8914-605d-4cb6-9c6e-4fbc7a675cb0"))
+		(pin "2" (uuid "7206dedb-f53e-4ac7-bd1c-b731569e2c99"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R30")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 259.0800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f331ebe0-96c0-4829-911b-6af4b23f31cc")
+		(property "Reference" "C30"
+			(at 262.8900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 262.8900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 259.0800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 259.0800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 259.0800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "b89667c7-7b63-4bd1-8d92-77f253058a45"))
+		(pin "2" (uuid "c750fa63-8eb4-4044-bc80-c23e9aa91c66"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C30")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 297.1800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "040f730b-0c86-426b-81e3-c1c8aa3f8860")
+		(property "Reference" "R31"
+			(at 300.9900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "10k"
+			(at 300.9900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 297.1800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 297.1800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C25804"
+			(at 297.1800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "8ddc8510-7b9e-4fe2-aaaf-51b7f6f2c02e"))
+		(pin "2" (uuid "ed896d0b-498b-4f5e-97b5-e9b3b035bf66"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 335.2800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "0bf7dd95-6061-4738-bd89-38565d0a288b")
+		(property "Reference" "C31"
+			(at 339.0900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 339.0900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 335.2800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 335.2800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 335.2800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "086c8150-e9fd-4ddb-9017-7b02ee9353d3"))
+		(pin "2" (uuid "4fa4497e-1ac7-4391-83aa-8ab0d2b0e439"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 373.3800 152.4000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6ede9728-14f6-47a2-8801-be1a85e552b0")
+		(property "Reference" "R32"
+			(at 377.1900 149.8600 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "10k"
+			(at 377.1900 154.9400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 373.3800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 373.3800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C25804"
+			(at 373.3800 152.4000 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "5ce2749b-75d0-4396-8e67-640f21c74b8b"))
+		(pin "2" (uuid "8f1577a0-c9d9-425a-8d15-1bb5a3531357"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 30.4800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "669c9296-1af7-4d48-9bce-83775844d8c0")
+		(property "Reference" "C32"
+			(at 34.2900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 34.2900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 30.4800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 30.4800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 30.4800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "96563d7b-e981-4ab6-abb7-31a0d16ed42d"))
+		(pin "2" (uuid "f842012f-c467-405a-8bb0-2994abc973ad"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 68.5800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7c56b598-5945-4c34-a05d-bd509c69aa01")
+		(property "Reference" "R33"
+			(at 72.3900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "4.7k"
+			(at 72.3900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 68.5800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 68.5800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C25905"
+			(at 68.5800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "a1bb5f04-d697-471a-b72d-ef33744b77dc"))
+		(pin "2" (uuid "9d8e9939-6135-4ba4-b1b6-4717e22037ed"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R33")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 106.6800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "66e4bceb-01f7-4a0a-9455-2c3c824012cb")
+		(property "Reference" "R34"
+			(at 110.4900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100R"
+			(at 110.4900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 106.6800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 106.6800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C22775"
+			(at 106.6800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "86d66b49-f107-43d0-98cf-89a742bfbb31"))
+		(pin "2" (uuid "0d1b53c2-a0cb-4738-968b-b09d191f40d7"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 144.7800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "90fea379-f7a9-43ee-bdbc-54693ce9b3c2")
+		(property "Reference" "C33"
+			(at 148.5900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100pF"
+			(at 148.5900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 144.7800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 144.7800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14858"
+			(at 144.7800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "6e42d363-9924-43e1-a84e-3057fc0b226b"))
+		(pin "2" (uuid "ef20bc39-0826-4090-b5eb-f38617cd6ea1"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C33")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 182.8800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a3a4b2a6-5ae7-455f-aefe-440fcd327353")
+		(property "Reference" "R35"
+			(at 186.6900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "4.7k"
+			(at 186.6900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 182.8800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 182.8800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C25905"
+			(at 182.8800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "052a8b6c-dc70-447b-90a4-305fa7bb81a1"))
+		(pin "2" (uuid "3a3684fd-084e-4bed-a333-79c76c075f22"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 220.9800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e2f7545d-7466-4b3d-a091-fa370e82a06f")
+		(property "Reference" "R36"
+			(at 224.7900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100R"
+			(at 224.7900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 220.9800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 220.9800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C22775"
+			(at 220.9800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "74264c0c-2761-4c03-b91c-d22835efaa50"))
+		(pin "2" (uuid "a739be26-7e99-4d52-b041-a7495a085349"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "R36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 259.0800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "847b7286-a59c-4899-8b47-993c7a16b5f0")
+		(property "Reference" "C34"
+			(at 262.8900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100pF"
+			(at 262.8900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 259.0800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 259.0800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14858"
+			(at 259.0800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "6f833aec-856c-489c-a10b-0d101b4aeac5"))
+		(pin "2" (uuid "9b8589c2-2c72-469b-bd62-907b1137d23a"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 297.1800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "529658d2-0e22-472c-95d3-38b18a3ecc1c")
+		(property "Reference" "C35"
+			(at 300.9900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 300.9900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 297.1800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 297.1800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 297.1800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "ec61841f-8017-4d28-a281-90fd6752602a"))
+		(pin "2" (uuid "e16a5305-3b78-4b75-92cb-6640c7ccad1c"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 335.2800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "77c15408-f446-46dc-8fae-22b268e9d153")
+		(property "Reference" "C36"
+			(at 339.0900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 339.0900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 335.2800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 335.2800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 335.2800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "de1acd09-de9f-4318-86f7-ac8c6d8f2985"))
+		(pin "2" (uuid "96a8cabe-e31c-4b07-9e80-b6b3fb21071d"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 373.3800 182.8800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b82bcb16-1613-4db4-871e-9236d21a1a51")
+		(property "Reference" "C37"
+			(at 377.1900 180.3400 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 377.1900 185.4200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 373.3800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 373.3800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 373.3800 182.8800 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "436831dc-821d-45bd-800a-b940221355bd"))
+		(pin "2" (uuid "1207414b-df7d-4657-bec6-7665906d11ad"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C37")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 30.4800 213.3600 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1d84c756-ba79-49df-a551-abca0608f255")
+		(property "Reference" "C38"
+			(at 34.2900 210.8200 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF"
+			(at 34.2900 215.9000 0)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 30.4800 213.3600 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "Datasheet" "~"
+			(at 30.4800 213.3600 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(property "LCSC" "C14663"
+			(at 30.4800 213.3600 0)
+			(effects (font (size 1.27 1.27))) (hide yes)
+		)
+		(pin "1" (uuid "88b6c123-9127-4fbe-94f0-f47ddda090d5"))
+		(pin "2" (uuid "2744e0f2-f107-4d3f-9dfa-0fadc57a0d67"))
+		(instances
+			(project "sensorbuddy"
+				(path "/a1b2c3d4-e5f6-7890-abcd-ef0123456789/e6486b85-78f9-450f-a2bc-d1e34aad41de"
+					(reference "C38")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(text "SENSORS — isolated probes + NTC + 1-Wire + floats.  PLACED, not wired.\n ISOLATION:  U7 ADM3260 = bidirectional I2C isolator + isoPower.  VDD1(5V)/GND1 = MCU side ;  VISO/GNDISO = probe side (ISO_3V3).\n   STM32 I2C1 (SCL/SDA) -> U7 side-1 -> side-2 -> U8 ADS1115 I2C (addr 0x48, ADDR->GND).  C26 ISO decouple.\n PROBES (x2, isolated):  BNC J5/J6 center -> bias midpoint (R20/R21, R22/R23 = 100k to VISO/GNDISO) -> U9 OPA2376 buffer\n   -> Rser 220R (R24/R25) + Cout 100pF (C20/C21) -> ADS1115 AIN0/1 (probe A), AIN2/3 (probe B).  C24/C25 ADS decouple.\n NTC (x3):  J7/J8/J9 = VDD--NTC--Vsense--Rfix(10k R30/R31/R32)--GND ;  Cfilt 100nF (C30/C31/C32) -> STM32 ADC.\n 1-WIRE (x2):  J10/J11 3-pos (VDD/DQ/GND) ;  Rpu 4.7k (R33/R35) DQ--3V3 ;  Rdmp 100R (R34/R36) + Cdmp 100pF (C33/C34) for long cable.\n FLOATS (x4):  J12..J15 2-pos -> STM32 GPIO ;  debounce Cdb 100nF (C35..C38) GPIO--GND."
+		(exclude_from_sim no)
+		(at 12.00 229.36 0)
+		(effects (font (size 1.5 1.5)) (justify left top))
+		(uuid "a84f85ad-ddfd-4790-8ad8-593bed11b188")
+	)
 	(sheet_instances
-		(path "/c3d4e5f6-a7b8-9012-cdef-012345678901"
+		(path "/"
 			(page "3")
 		)
 	)
