@@ -506,7 +506,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "sensorbuddy.kicad_pro",
+    "filename": "plugcontrol.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -690,9 +690,9 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "sensorbuddy.kicad_sch",
-        "name": "sensorbuddy",
-        "uuid": "a1b2c3d4-e5f6-7890-abcd-ef0123456789"
+        "filename": "plugcontrol.kicad_sch",
+        "name": "plugcontrol",
+        "uuid": "c0000000-0000-4c01-8000-000000000001"
       }
     ],
     "used_designators": "",
@@ -700,20 +700,20 @@
   },
   "sheets": [
     [
-      "a1b2c3d4-e5f6-7890-abcd-ef0123456789",
-      "sensorbuddy"
+      "c0000000-0000-4c01-8000-000000000001",
+      "plugcontrol"
     ],
     [
-      "60616715-fac0-4cb1-8f3a-152589cd21b7",
-      "MAIN"
+      "bb4fe144-a2c8-480d-ac18-14c2b5fb62ce",
+      "MCU"
     ],
     [
-      "f52a4ed5-c1a0-4069-8c26-21979fcdfc09",
-      "PSU"
+      "2c688580-7c60-4391-be69-8709079f9059",
+      "Safety"
     ],
     [
-      "e6486b85-78f9-450f-a2bc-d1e34aad41de",
-      "SENSORS"
+      "101b2e32-dd10-4648-8b0c-96c4dfbc9d91",
+      "Actuation"
     ]
   ],
   "text_variables": {},

@@ -1,0 +1,6 @@
+# DryContact — designators assembled BY HAND (excluded from JLCPCB BOM + CPL).
+# Through-hole connectors: Micro-Fit CAN + Phoenix DC-in + 4x Phoenix outputs.
+# (USB-C J1 is JLC-assemblable via its LCSC and stays in the assembly package.)
+J2      # CAN Micro-Fit 3.0 6-pos (43045-0612)
+J3      # DC in, Phoenix MPT 2-pos
+J4, J5, J6, J7   # CH1-4 dry-contact outputs, Phoenix MPT 3-pos

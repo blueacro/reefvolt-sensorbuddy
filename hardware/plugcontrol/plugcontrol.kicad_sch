@@ -2,15 +2,15 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid "a1b2c3d4-e5f6-7890-abcd-ef0123456789")
+	(uuid "c0000000-0000-4c01-8000-000000000001")
 	(paper "A3")
 	(title_block
-		(title "ReefVolt SensorBuddy — Main")
+		(title "ReefVolt PlugControl — 2ch AC heater carrier")
 		(date "2026-07-04")
 		(rev "0.1")
 		(company "blueAcro / ReefVolt")
-		(comment 1 "Aquarium sensor interface — CAN master of the SensorBuddy cluster")
-		(comment 2 "ESP32-S3 + STM32G0B1 + isolated pH/ORP + NTC + 1-Wire + floats")
+		(comment 1 "2-channel AC heater carrier with independent hardware safety interlock")
+		(comment 2 "STM32G0B1 + TCAN1044; 2x SSR + master G5LE relay; analog safety chain (REF3330/TLV3202/74HC74/74HC08/TPS3823)")
 	)
 	(lib_symbols)
 	(sheet
@@ -19,12 +19,12 @@
 		(fields_autoplaced yes)
 		(stroke (width 0.1524) (type solid))
 		(fill (color 0 0 0 0.0000))
-		(uuid "60616715-fac0-4cb1-8f3a-152589cd21b7")
-		(property "Sheetname" "MAIN"
+		(uuid "bb4fe144-a2c8-480d-ac18-14c2b5fb62ce")
+		(property "Sheetname" "MCU"
 			(at 40.64 39.37 0)
 			(effects (font (size 1.27 1.27)) (justify left bottom))
 		)
-		(property "Sheetfile" "main.kicad_sch"
+		(property "Sheetfile" "mcu.kicad_sch"
 			(at 40.64 63.91 0)
 			(effects (font (size 1.27 1.27)) (justify left top))
 		)
@@ -35,12 +35,12 @@
 		(fields_autoplaced yes)
 		(stroke (width 0.1524) (type solid))
 		(fill (color 0 0 0 0.0000))
-		(uuid "f52a4ed5-c1a0-4069-8c26-21979fcdfc09")
-		(property "Sheetname" "PSU"
+		(uuid "2c688580-7c60-4391-be69-8709079f9059")
+		(property "Sheetname" "Safety"
 			(at 96.52 39.37 0)
 			(effects (font (size 1.27 1.27)) (justify left bottom))
 		)
-		(property "Sheetfile" "psu.kicad_sch"
+		(property "Sheetfile" "safety.kicad_sch"
 			(at 96.52 63.91 0)
 			(effects (font (size 1.27 1.27)) (justify left top))
 		)
@@ -51,12 +51,12 @@
 		(fields_autoplaced yes)
 		(stroke (width 0.1524) (type solid))
 		(fill (color 0 0 0 0.0000))
-		(uuid "e6486b85-78f9-450f-a2bc-d1e34aad41de")
-		(property "Sheetname" "SENSORS"
+		(uuid "101b2e32-dd10-4648-8b0c-96c4dfbc9d91")
+		(property "Sheetname" "Actuation"
 			(at 152.40 39.37 0)
 			(effects (font (size 1.27 1.27)) (justify left bottom))
 		)
-		(property "Sheetfile" "sensors.kicad_sch"
+		(property "Sheetfile" "actuation.kicad_sch"
 			(at 152.40 63.91 0)
 			(effects (font (size 1.27 1.27)) (justify left top))
 		)

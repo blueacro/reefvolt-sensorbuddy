@@ -2,15 +2,15 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid "a1b2c3d4-e5f6-7890-abcd-ef0123456789")
+	(uuid "d0000000-0000-4dc0-8000-000000000001")
 	(paper "A3")
 	(title_block
-		(title "ReefVolt SensorBuddy — Main")
+		(title "ReefVolt DryContact — 4ch Form-C carrier")
 		(date "2026-07-04")
 		(rev "0.1")
 		(company "blueAcro / ReefVolt")
-		(comment 1 "Aquarium sensor interface — CAN master of the SensorBuddy cluster")
-		(comment 2 "ESP32-S3 + STM32G0B1 + isolated pH/ORP + NTC + 1-Wire + floats")
+		(comment 1 "4-channel Form-C dry-contact output carrier for the SensorBuddy CAN cluster")
+		(comment 2 "STM32G0B1 + TCAN1044 + ULN2003 + 4x Omron G6K-2F-Y; 29-bit CAN, UID auto-address")
 	)
 	(lib_symbols)
 	(sheet
@@ -19,12 +19,12 @@
 		(fields_autoplaced yes)
 		(stroke (width 0.1524) (type solid))
 		(fill (color 0 0 0 0.0000))
-		(uuid "60616715-fac0-4cb1-8f3a-152589cd21b7")
-		(property "Sheetname" "MAIN"
+		(uuid "6aadac48-35b5-4227-8ed5-9dbae3a8cee2")
+		(property "Sheetname" "MCU"
 			(at 40.64 39.37 0)
 			(effects (font (size 1.27 1.27)) (justify left bottom))
 		)
-		(property "Sheetfile" "main.kicad_sch"
+		(property "Sheetfile" "mcu.kicad_sch"
 			(at 40.64 63.91 0)
 			(effects (font (size 1.27 1.27)) (justify left top))
 		)
@@ -35,8 +35,8 @@
 		(fields_autoplaced yes)
 		(stroke (width 0.1524) (type solid))
 		(fill (color 0 0 0 0.0000))
-		(uuid "f52a4ed5-c1a0-4069-8c26-21979fcdfc09")
-		(property "Sheetname" "PSU"
+		(uuid "345e2863-c1ad-4a65-acd6-35ac944868d2")
+		(property "Sheetname" "PWR"
 			(at 96.52 39.37 0)
 			(effects (font (size 1.27 1.27)) (justify left bottom))
 		)
@@ -51,12 +51,12 @@
 		(fields_autoplaced yes)
 		(stroke (width 0.1524) (type solid))
 		(fill (color 0 0 0 0.0000))
-		(uuid "e6486b85-78f9-450f-a2bc-d1e34aad41de")
-		(property "Sheetname" "SENSORS"
+		(uuid "b05191d9-8017-47f0-80ab-246cabb273f0")
+		(property "Sheetname" "Relays"
 			(at 152.40 39.37 0)
 			(effects (font (size 1.27 1.27)) (justify left bottom))
 		)
-		(property "Sheetfile" "sensors.kicad_sch"
+		(property "Sheetfile" "relays.kicad_sch"
 			(at 152.40 63.91 0)
 			(effects (font (size 1.27 1.27)) (justify left top))
 		)

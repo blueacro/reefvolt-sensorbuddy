@@ -1,0 +1,12 @@
+# PlugControl — designators assembled BY HAND (excluded from JLCPCB BOM + CPL).
+# Through-hole connectors + THT master relay + THT SSRs. Mains screw terminals
+# are hand-terminated field wiring. (USB-C J1 is JLC-assemblable via its LCSC
+# and stays in the assembly package.)
+J2      # CAN Micro-Fit 3.0 6-pos (43045-0612)
+J3      # DC in 12-24V, Phoenix MPT 2-pos
+J4      # NTC safety probe, Phoenix MPT 2-pos
+J5      # AC IN L/N/PE, Phoenix MKDS 5.08mm 3-pos (mains screw)
+J6      # AC OUT A L/N/PE, Phoenix MKDS 5.08mm 3-pos (mains screw)
+J7      # AC OUT B L/N/PE, Phoenix MKDS 5.08mm 3-pos (mains screw)
+K1      # Master relay, Omron G5LE-14 5VDC (THT SPDT)
+K2, K3  # SSR CH_A/CH_B (Panasonic AQH / Sharp S216 — THT, part TBD)
