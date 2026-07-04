@@ -42,6 +42,19 @@ fi
 KICAD_CLI=${KICAD_CLI:-kicad-cli}
 NAME=$(basename "$PCB" .kicad_pcb)
 
+# Optional hand-solder list: designators assembled by hand (not by JLCPCB) are
+# excluded from BOTH the assembly BOM and the CPL, so the two match exactly.
+# File: <name>-handsolder.txt next to the PCB; refs comma/space/newline-separated,
+# '#' comments allowed. Through-hole parts NOT listed here (e.g. JST connectors
+# with an LCSC) stay in the package for JLCPCB THT assembly.
+HANDSOLDER_FILE="$(dirname "$PCB")/${NAME}-handsolder.txt"
+export HANDSOLDER=""
+if [[ -f "$HANDSOLDER_FILE" ]]; then
+    HANDSOLDER=$(grep -vE '^\s*#' "$HANDSOLDER_FILE" | tr ', \t' '\n' \
+                 | grep -E '^[A-Za-z]+[0-9]+$' | paste -sd, - || true)
+    echo "[jlcpcb]   hand-solder (excluded from assembly): ${HANDSOLDER:-none}"
+fi
+
 echo "[jlcpcb] building package for $NAME"
 echo "[jlcpcb]   PCB: $PCB"
 echo "[jlcpcb]   SCH: $SCH"
@@ -97,36 +110,75 @@ echo "[jlcpcb] generating drill (excellon, merged, mm)"
 # KiCad's csv format produces almost-compatible output; we rename headers.
 echo "[jlcpcb] generating CPL (both sides, mm)"
 RAW_CPL="$OUT_DIR/${NAME}-CPL-raw.csv"
+# Include through-hole footprints (JST connectors JLC will THT-assemble); the
+# hand-solder list below then removes the parts assembled by hand.
 "$KICAD_CLI" pcb export pos \
     --output "$RAW_CPL" \
     --format csv \
     --units mm \
     --side both \
     --use-drill-file-origin \
-    --smd-only \
+    --exclude-dnp \
     "$PCB" >/dev/null
 
 # Translate KiCad's columns (Ref,Val,Package,PosX,PosY,Rot,Side) to JLCPCB's
 # schema (Designator,Val,Package,Mid X,Mid Y,Rotation,Layer). Also capitalize
 # the Side values ("top"/"bottom" -> "Top"/"Bottom").
 python3 <<PYEOF
-import csv, os, sys
+import csv, os, re
 
 raw = "$RAW_CPL"
 out = "$OUT_DIR/${NAME}-CPL.csv"
+pcb = "$PCB"
 
+# Footprints flagged "exclude_from_bom" in the PCB (solder jumpers, tag-connect
+# programming pads, test points) carry no LCSC part number, so JLCPCB cannot
+# assemble them. They must be dropped from the CPL as well — otherwise JLCPCB
+# reports "<ref> designators don't exist in the BOM file" and refuses the order.
+def excluded_from_bom(pcb_path):
+    src = open(pcb_path).read()
+    refs, i = set(), 0
+    while True:
+        idx = src.find("(footprint ", i)
+        if idx < 0:
+            break
+        depth, j = 0, idx
+        while j < len(src):
+            c = src[j]
+            if c == "(":
+                depth += 1
+            elif c == ")":
+                depth -= 1
+                if depth == 0:
+                    break
+            j += 1
+        block = src[idx:j + 1]
+        m = re.search(r'\(property "Reference" "([^"]+)"', block)
+        a = re.search(r"\(attr ([^)]*)\)", block)
+        if m and a and "exclude_from_bom" in a.group(1):
+            refs.add(m.group(1))
+        i = j + 1
+    return refs
+
+handsolder = {r for r in os.environ.get("HANDSOLDER", "").split(",") if r}
+noplace = excluded_from_bom(pcb)
+mech = re.compile(r"^(H|MH|MK|MP|FID|REF)\d+$")  # mounting holes / fiducials
+skipped = []
 with open(raw, newline="") as fin, open(out, "w", newline="") as fout:
     rdr = csv.reader(fin)
     wtr = csv.writer(fout)
-    hdr = next(rdr)
-    # KiCad header: Ref,Val,Package,PosX,PosY,Rot,Side
+    next(rdr)  # KiCad header: Ref,Val,Package,PosX,PosY,Rot,Side
     wtr.writerow(["Designator", "Val", "Package", "Mid X", "Mid Y", "Rotation", "Layer"])
     for row in rdr:
         if not row: continue
         ref, val, pkg, x, y, rot, side = row[:7]
+        # drop mounting holes / fiducials, exclude-from-BOM parts, and hand-solder
+        if mech.match(ref) or ref in noplace or ref in handsolder:
+            skipped.append(ref); continue
         side_cap = side.strip().capitalize()
         wtr.writerow([ref, val, pkg, x, y, rot, side_cap])
-print(f"[jlcpcb]   wrote {out}")
+print(f"[jlcpcb]   wrote {out}"
+      + (f" (CPL skipped: {','.join(sorted(skipped))})" if skipped else ""))
 PYEOF
 rm -f "$RAW_CPL"
 
@@ -137,8 +189,36 @@ echo "[jlcpcb] generating BOM"
     --fields '${ITEM_NUMBER},Reference,Value,Footprint,${QUANTITY},LCSC,MPN,Manufacturer' \
     --labels "Item,Designator,Comment,Footprint,Qty,LCSC Part #,MPN,Manufacturer" \
     --group-by 'Value,Footprint' \
+    --ref-delimiter ',' \
+    --ref-range-delimiter '' \
     --exclude-dnp \
     "$SCH" >/dev/null
+
+# Drop hand-soldered designators from the assembly BOM (recompute Qty, drop rows
+# that become empty) so the BOM matches the CPL.
+python3 <<PYEOF
+import csv, os
+bom = "$OUT_DIR/${NAME}-BOM.csv"
+handsolder = {r for r in os.environ.get("HANDSOLDER", "").split(",") if r}
+if handsolder:
+    rows = list(csv.DictReader(open(bom, newline="")))
+    out, dropped = [], []
+    for r in rows:
+        refs = [d.strip() for d in r["Designator"].split(",") if d.strip()]
+        keep = [d for d in refs if d not in handsolder]
+        dropped += [d for d in refs if d in handsolder]
+        if not keep:
+            continue
+        r["Designator"] = ",".join(keep)
+        if "Qty" in r: r["Qty"] = str(len(keep))
+        out.append(r)
+    if rows:
+        with open(bom, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+            w.writeheader(); w.writerows(out)
+    if dropped:
+        print(f"[jlcpcb]   BOM hand-solder excluded: {','.join(sorted(dropped))}")
+PYEOF
 
 # --- README ------------------------------------------------------------------
 cat > "$OUT_DIR/README.txt" <<EOF

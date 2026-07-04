@@ -20,7 +20,7 @@
 KICAD_CLI ?= kicad-cli
 
 # Add new PCB projects here.
-PROJECTS    := sensorbuddy plugcontrol
+PROJECTS    := sensorbuddy plugcontrol drycontact
 
 BOM_FIELDS  := $${ITEM_NUMBER},Reference,Value,Footprint,$${QUANTITY},LCSC,MPN,Manufacturer
 BOM_LABELS  := Item,Designator,Comment,Footprint,Qty,LCSC Part \#,MPN,Manufacturer
@@ -29,7 +29,7 @@ SCRIPTS_DIR := scripts
 JLC_SCRIPT  := $(SCRIPTS_DIR)/jlcpcb-package.sh
 
 .PHONY: all docs jlc clean-docs clean-jlc help
-.PHONY: $(foreach p,$(PROJECTS),docs-$(p) images-$(p) bom-$(p) jlc-$(p))
+.PHONY: $(foreach p,$(PROJECTS),docs-$(p) images-$(p) bom-$(p) jlc-$(p) gen-$(p) check-$(p) render-$(p))
 
 all: docs
 
@@ -69,23 +69,27 @@ $(1)_BOM  := $(1)/jlcpcb_bom.csv
 
 docs-$(1): images-$(1) bom-$(1)
 
-images-$(1): $$($(1)_SCH) $$($(1)_PCB)
+images-$(1): $$($(1)_SCH)
 	@mkdir -p $$($(1)_IMG)
 	@echo "[$(1)] Schematic SVGs"
 	$$(KICAD_CLI) sch export svg -o $$($(1)_IMG)/ $$($(1)_SCH)
-	@echo "[$(1)] PCB top SVG"
-	$$(KICAD_CLI) pcb export svg -o $$($(1)_IMG)/pcb-top.svg \
-	    --layers "F.Cu,F.Silkscreen,F.Mask,Edge.Cuts" \
-	    --page-size-mode 2 $$($(1)_PCB)
-	@echo "[$(1)] PCB bottom SVG (mirrored)"
-	$$(KICAD_CLI) pcb export svg -o $$($(1)_IMG)/pcb-bottom.svg \
-	    --layers "B.Cu,B.Silkscreen,B.Mask,Edge.Cuts" \
-	    --mirror --page-size-mode 2 $$($(1)_PCB)
-	@echo "[$(1)] 3D renders"
-	$$(KICAD_CLI) pcb render --side top    --width 1600 --height 1000 \
-	    -o $$($(1)_IMG)/pcb-3d-top.png    $$($(1)_PCB)
-	$$(KICAD_CLI) pcb render --side bottom --width 1600 --height 1000 \
-	    -o $$($(1)_IMG)/pcb-3d-bottom.png $$($(1)_PCB)
+	@if [ -f $$($(1)_PCB) ]; then \
+	    echo "[$(1)] PCB top SVG"; \
+	    $$(KICAD_CLI) pcb export svg -o $$($(1)_IMG)/pcb-top.svg \
+	        --layers "F.Cu,F.Silkscreen,F.Mask,Edge.Cuts" \
+	        --page-size-mode 2 $$($(1)_PCB); \
+	    echo "[$(1)] PCB bottom SVG (mirrored)"; \
+	    $$(KICAD_CLI) pcb export svg -o $$($(1)_IMG)/pcb-bottom.svg \
+	        --layers "B.Cu,B.Silkscreen,B.Mask,Edge.Cuts" \
+	        --mirror --page-size-mode 2 $$($(1)_PCB); \
+	    echo "[$(1)] 3D renders"; \
+	    $$(KICAD_CLI) pcb render --side top    --width 1600 --height 1000 \
+	        -o $$($(1)_IMG)/pcb-3d-top.png    $$($(1)_PCB); \
+	    $$(KICAD_CLI) pcb render --side bottom --width 1600 --height 1000 \
+	        -o $$($(1)_IMG)/pcb-3d-bottom.png $$($(1)_PCB); \
+	else \
+	    echo "[$(1)] no .kicad_pcb yet — skipping PCB renders"; \
+	fi
 
 bom-$(1): $$($(1)_SCH)
 	@echo "[$(1)] JLCPCB BOM"
@@ -101,6 +105,19 @@ jlc-$(1): $$(JLC_SCRIPT) $$($(1)_PCB) $$($(1)_SCH)
 	@echo "[jlcpcb] building package for $(1)"
 	cd $$($(1)_DIR) && KICAD_CLI=$$(KICAD_CLI) ../$$(JLC_SCRIPT) \
 	    $(1).kicad_pcb $(1).kicad_sch
+
+# Regenerate the schematic from its data manifest (placed, not wired).
+gen-$(1): $(SCRIPTS_DIR)/$(1).schgen.py
+	@echo "[$(1)] generating schematic from manifest"
+	python3 $(SCRIPTS_DIR)/$(1).schgen.py
+
+# Sanity-check the schematic: component count, footprints, dup refs, ERC tally.
+check-$(1): $$($(1)_SCH)
+	@KICAD_CLI=$$(KICAD_CLI) python3 $(SCRIPTS_DIR)/kicad-sch-check.py $$($(1)_SCH)
+
+# Render every sheet to PNG for a quick visual review.
+render-$(1): $$($(1)_SCH)
+	@KICAD_CLI=$$(KICAD_CLI) $(SCRIPTS_DIR)/kicad-sch-render.sh $$($(1)_SCH)
 
 endef
 
