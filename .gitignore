@@ -29,3 +29,6 @@ Thumbs.db
 # Python bytecode from hardware/scripts generators
 __pycache__/
 *.pyc
+
+# Firmware host-test build artifacts
+firmware/**/tests/build/
